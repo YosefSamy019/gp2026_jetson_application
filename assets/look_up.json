@@ -1,0 +1,55 @@
+{
+  "GREETING": [
+    "Hello",
+    "Good morning",
+    "Welcome"
+  ],
+  "DRIVER_NOT_DETECTED": [
+    "Driver not detected, please sit properly",
+    "No driver detected, return to the driver's seat",
+    "Please make sure the driver is present"
+  ],
+  "DRIVER_FACE_NOT_RECOGNIZED": [
+    "Driver not recognized, please identify yourself",
+    "Unknown driver detected, access restricted",
+    "This vehicle is registered to another driver"
+  ],
+  "DRIVER_DROWSY": [
+    "You appear to be drowsy, please take a break",
+    "You look tired, consider resting",
+    "Drowsiness detected, stay alert"
+  ],
+  "DRIVER_DISTRACTED": [
+    "Please focus on the road",
+    "You are distracted, keep your eyes on the road",
+    "Attention required, do not look away"
+  ],
+  "DRIVER_USING_PHONE": [
+    "Please stop using your phone",
+    "Phone usage detected, focus on driving",
+    "Do not text while driving"
+  ],
+  "DRIVER_SMOKING": [
+    "Smoking detected, please stop smoking",
+    "Please avoid smoking while driving"
+  ],
+  "WEAPON_DETECTED": [
+    "Warning: weapon detected",
+    "Dangerous object detected, drive with caution"
+  ],
+  "HIGH_TEMPERATURE": [
+    "Temperature is high, please turn on the air conditioning",
+    "The vehicle is too hot, check the AC system",
+    "Overheating detected, take action"
+  ],
+  "DRIVER_SEATBELT": [
+    "Please fasten your seat belt",
+    "Seat belt not detected, please fasten it",
+    "For your safety, fasten your seat belt"
+  ],
+  "DRIVER_FOOD": [
+    "Please avoid eating while driving",
+    "Eating detected, keep your hands on the wheel",
+    "For your safety, do not eat while driving"
+  ]
+}

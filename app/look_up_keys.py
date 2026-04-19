@@ -1,0 +1,49 @@
+# ----- General ---------
+KEY_GREETING = "GREETING"
+KEY_DRIVER_NOT_DETECTED = "DRIVER_NOT_DETECTED"
+KEY_DRIVER_FACE_NOT_RECOGNIZED = "DRIVER_FACE_NOT_RECOGNIZED"
+
+# ----- DRIVER ATTENTION & BEHAVIOR -----
+KEY_DRIVER_DROWSY = "DRIVER_DROWSY"
+KEY_DRIVER_DISTRACTED = "DRIVER_DISTRACTED"
+KEY_DRIVER_USING_PHONE = "DRIVER_USING_PHONE"
+KEY_DRIVER_SMOKING = "DRIVER_SMOKING"
+KEY_DRIVER_FOOD = "DRIVER_FOOD"
+KEY_DRIVER_SEATBELT = "DRIVER_SEATBELT"
+
+# ----- SAFETY & EMERGENCY -----
+KEY_WEAPON_DETECTED = "WEAPON_DETECTED"
+
+# ----- SYSTEM & ENVIRONMENT -----
+KEY_HIGH_TEMPERATURE = "HIGH_TEMPERATURE"
+
+# ---------------------------------
+
+# Priorities
+PRIORITY_MAP = {
+    # Least important → GREETING
+    KEY_GREETING: 1,
+
+    # Driver attention & behavior
+    KEY_DRIVER_FOOD:2,
+    KEY_DRIVER_SMOKING: 3,
+    KEY_DRIVER_USING_PHONE: 4,
+    KEY_DRIVER_SEATBELT: 5,
+    KEY_DRIVER_DISTRACTED: 6,
+    KEY_DRIVER_DROWSY: 7,
+
+    # Driver presence / identity
+    KEY_DRIVER_FACE_NOT_RECOGNIZED: 8,
+    KEY_DRIVER_NOT_DETECTED: 9,
+
+    # System & environment
+    KEY_HIGH_TEMPERATURE: 10,
+
+    # Safety & emergency — most important
+    KEY_WEAPON_DETECTED: 11,
+}
+
+
+def get_priority(event_key: str) -> int:
+    global PRIORITY_MAP
+    return PRIORITY_MAP.get(event_key, 0)  # 0 = Lowest one

@@ -1,0 +1,34 @@
+name: Build Windows with Nuitka
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install nuitka
+          pip install -r libs.txt
+
+      - name: Build exe
+        run: |
+          python -m nuitka main.py --standalone --onefile --enable-plugin=tk-inter --include-package=pyttsx3 --include-package=comtypes --include-data-dir=assets=assets  --include-package-data=mediapipe --assume-yes-for-downloads --output-dir=build_output --output-filename=SmartDriverMonitor.exe --windows-icon-from-ico=assets/app_icon.ico --windows-product-name="Smart Driver Monitor" --windows-file-description="Smart Driver Monitor App" --windows-company-name="BENHA" --windows-file-version=1.0.0 --windows-product-version=1.0.0
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-executable
+          path: build_output/*.exe
+          retention-days: 1
