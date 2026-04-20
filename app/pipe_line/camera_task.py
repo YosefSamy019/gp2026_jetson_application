@@ -7,12 +7,20 @@ import os
 
 
 def camera_task():
-    if os.environ.get('COMPUTERNAME') == "YOSEF-SA":
+    computer_name = os.environ.get('COMPUTERNAME')
+
+    if computer_name == "YOSEF-SA":
+        # Youssef Samy Laptop
         camera_path = r"D:\GP\dataset\videos\distraction\gA_4_s1_2019-03-13T10;36;15+01;00_rgb_face.mp4"
         camera_path = 0
-    else:
+    elif computer_name == 'DESKTOP-17FURUT':
+        # Yahia Laptop
         camera_path = 1
+    else:
+        # Linux Board
+        camera_path = 0
 
+    logs.add_log(f"Current Computer Name: {computer_name}", logs.LogLevel.INFO)
     logs.add_log(f"Selected Camera Path: {camera_path}", logs.LogLevel.INFO)
 
     cap = cv2.VideoCapture(camera_path)
