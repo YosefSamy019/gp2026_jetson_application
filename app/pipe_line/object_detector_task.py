@@ -92,6 +92,7 @@ def object_detector_task():
                 })
 
         except Exception as e:
+            raise e
             logs.add_log(f"object_detector_task: error {e}", logs.LogLevel.ERROR)
 
         time.sleep(timing.OBJECTS_DETECTOR_TASK_SLEEP_TIME)
