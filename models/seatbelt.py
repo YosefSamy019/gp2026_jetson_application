@@ -2,6 +2,7 @@ from typing import Optional
 import numpy as np
 from ultralytics import YOLO
 import constants.assets_manager as assets_manager
+from mcal import logs
 
 _seatbelt_yolo: Optional[YOLO] = None
 
@@ -12,6 +13,8 @@ def init():
     _seatbelt_yolo = YOLO(
         assets_manager.SEATBELT_YOLO_MODEL_PATH  # e.g. "seatbelt_best.pt"
     )
+
+    logs.add_log(f"Locate Seatbelt Detection Model on ({_seatbelt_yolo.device})", logs.LogLevel.INFO)
 
 
 def seatbelt_model(image: np.ndarray):

@@ -27,14 +27,14 @@ def head_pose_task():
                      # TODO : will we pass head danger delta time ?!
                     })
 
-            if cur_class!="front":
-                if head_pose_start is None:
-                    head_pose_start = time.time()
-                elif time.time() - head_pose_start >= DISTRACTED_THRESHOLD_SECONDS:
+                if cur_class !="front":
+                    if head_pose_start is None:
+                        head_pose_start = time.time()
+                    elif time.time() - head_pose_start >= DISTRACTED_THRESHOLD_SECONDS:
 
-                    signals.speaker_queue.put(look_up_keys.KEY_DRIVER_DISTRACTED)
-            else:
-                head_pose_start = None
+                        signals.speaker_queue.put(look_up_keys.KEY_DRIVER_DISTRACTED)
+                else:
+                    head_pose_start = None
 
         except Exception as e:
             logs.add_log(f"head_pose_task: error {e}", logs.LogLevel.ERROR)

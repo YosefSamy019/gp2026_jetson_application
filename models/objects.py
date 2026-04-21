@@ -2,6 +2,7 @@ from typing import Optional
 import numpy as np
 from ultralytics import YOLO
 import constants.assets_manager as assets_manager
+from mcal import logs
 
 _objects_model: Optional[YOLO] = None
 
@@ -12,6 +13,8 @@ def init():
     _objects_model = YOLO(
         assets_manager.OBJECTS_YOLO_MODEL_PATH  # e.g. "yolo11n.pt" or custom .pt
     )
+
+    logs.add_log(f"Locate Objects Detection Model on ({_objects_model.device})", logs.LogLevel.INFO)
 
 
 def objects_model(image: np.ndarray):

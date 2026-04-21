@@ -68,26 +68,26 @@ def show_logs_window(
     btn_frame = ctk.CTkFrame(main_fram_hook)
     btn_frame.pack(padx=10, pady=5, fill="x")
 
-    btn0 = ctk.CTkButton(btn_frame, text="Clear", fg_color="red",
+    btn0 = ctk.CTkButton(btn_frame, text="Clear", fg_color="red",width=10,
                          command=lambda: logs.clear_logs())
     btn0.pack(side="left", padx=5, pady=5, expand=True, fill="x")
 
-    btn1 = ctk.CTkButton(btn_frame, text=btn_texts_list[0], fg_color=_get_btn_color(0),
+    btn1 = ctk.CTkButton(btn_frame, text=btn_texts_list[0], fg_color=_get_btn_color(0),width=10,
                          command=lambda: _filter_btn_command(0))
     btn1.pack(side="left", padx=5, pady=5, expand=True, fill="x")
     btns_list.append(btn1)
 
-    btn2 = ctk.CTkButton(btn_frame, text=btn_texts_list[1], fg_color=_get_btn_color(1),
+    btn2 = ctk.CTkButton(btn_frame, text=btn_texts_list[1], fg_color=_get_btn_color(1),width=10,
                          command=lambda: _filter_btn_command(LogLevel.INFO.value))
     btn2.pack(side="left", padx=5, pady=5, expand=True, fill="x")
     btns_list.append(btn2)
 
-    btn3 = ctk.CTkButton(btn_frame, text=btn_texts_list[2], fg_color=_get_btn_color(2),
+    btn3 = ctk.CTkButton(btn_frame, text=btn_texts_list[2], fg_color=_get_btn_color(2),width=10,
                          command=lambda: _filter_btn_command(LogLevel.WARNING.value))
     btn3.pack(side="left", padx=5, pady=5, expand=True, fill="x")
     btns_list.append(btn3)
 
-    btn4 = ctk.CTkButton(btn_frame, text=btn_texts_list[3], fg_color=_get_btn_color(3),
+    btn4 = ctk.CTkButton(btn_frame, text=btn_texts_list[3], fg_color=_get_btn_color(3),width=10,
                          command=lambda: _filter_btn_command(LogLevel.ERROR.value))
     btn4.pack(side="left", padx=5, pady=5, expand=True, fill="x")
     btns_list.append(btn4)
