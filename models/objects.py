@@ -1,5 +1,6 @@
 from typing import Optional
 import numpy as np
+import torch
 from ultralytics import YOLO
 import constants.assets_manager as assets_manager
 from mcal import logs
@@ -14,7 +15,14 @@ def init():
         assets_manager.OBJECTS_YOLO_MODEL_PATH  # e.g. "yolo11n.pt" or custom .pt
     )
 
-    logs.add_log(f"Locate Objects Detection Model on ({_objects_model.device})", logs.LogLevel.INFO)
+    # Force GPU if available
+    if torch.cuda.is_available():
+        _objects_model.to("cuda")
+        device_used = "cuda"
+    else:
+        device_used = "cpu"
+
+    logs.add_log(f"Locate Objects Detection Model on ({device_used})", logs.LogLevel.INFO)
 
 
 def objects_model(image: np.ndarray):

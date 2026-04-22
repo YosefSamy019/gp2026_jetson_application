@@ -20,7 +20,6 @@ root: ctk.CTk = None
 
 display_cam_frame: ctk.BooleanVar = None
 
-
 def play_intro(root, callback):
     splash = ctk.CTkFrame(root)
     splash.place(relx=0, rely=0, relwidth=1, relheight=1)
@@ -31,21 +30,38 @@ def play_intro(root, callback):
 
     cap = cv2.VideoCapture(assets_manager.INTRO_VIDEO_PATH)
 
+    placeholder_img = ctk.CTkImage(
+        light_image=Image.new("RGB", (10, 10)),
+        dark_image=Image.new("RGB", (10, 10)),
+        size=(10, 10)
+    )
+
+    video_label.configure(image=placeholder_img)
+    video_label.image = placeholder_img
+
     def update_frame():
         ret, frame = cap.read()
+
         if not ret:
             cap.release()
             splash.destroy()
             callback()
             return
 
-        w = root.winfo_width()
-        h = root.winfo_height()
+        w = max(root.winfo_width(), 1)
+        h = max(root.winfo_height(), 1)
 
         frame = cv2.resize(frame, (w, h))
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-        img = ImageTk.PhotoImage(Image.fromarray(frame))
+        pil_img = Image.fromarray(frame)
+
+        img = ctk.CTkImage(
+            light_image=pil_img,
+            dark_image=pil_img,
+            size=(w, h)
+        )
+
         video_label.configure(image=img)
         video_label.image = img
 

@@ -35,7 +35,7 @@ def show_cam_window(
             not _widget_alive(main_fram_hook._cam_label)):
         main_fram_hook._cam_label = ctk.CTkLabel(main_fram_hook, text="")
         main_fram_hook._cam_label.configure(width=640, height=480)
-        main_fram_hook._cam_label.pack(padx=10, pady=10, expand=True)
+        main_fram_hook._cam_label.pack(padx=0, pady=0, expand=True)
 
     try:
         lens_output = signals.lens_output_queue.get_immediate()
@@ -54,7 +54,6 @@ def show_cam_window(
 
         logs.add_log(f"Error show_cam_window: {e}", logs.LogLevel.ERROR)
 
-    # Schedule next frame ONLY if still alive
     if display_cam_frame.get() and _widget_alive(main_fram_hook):
         root.after(timing.UI_UPDATE_SLEEP_TIME, lambda: show_cam_window(root, main_fram_hook, display_cam_frame))
 

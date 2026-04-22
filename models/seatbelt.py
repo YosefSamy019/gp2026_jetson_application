@@ -1,5 +1,6 @@
 from typing import Optional
 import numpy as np
+import torch
 from ultralytics import YOLO
 import constants.assets_manager as assets_manager
 from mcal import logs
@@ -14,7 +15,14 @@ def init():
         assets_manager.SEATBELT_YOLO_MODEL_PATH  # e.g. "seatbelt_best.pt"
     )
 
-    logs.add_log(f"Locate Seatbelt Detection Model on ({_seatbelt_yolo.device})", logs.LogLevel.INFO)
+    # Force GPU if available
+    if torch.cuda.is_available():
+        _seatbelt_yolo.to("cuda")
+        device_used = "cuda"
+    else:
+        device_used = "cpu"
+
+    logs.add_log(f"Locate Seatbelt Detection Model on ({device_used})", logs.LogLevel.INFO)
 
 
 def seatbelt_model(image: np.ndarray):

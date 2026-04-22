@@ -9,7 +9,7 @@ import app.pipe_line.timing as timing
 
 def face_extractor_task():
     mp_face = mp.solutions.face_mesh.FaceMesh(
-        max_num_faces=1, static_image_mode=True, refine_landmarks=True
+        max_num_faces=1, static_image_mode=False, refine_landmarks=True
     )
 
     while True:

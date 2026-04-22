@@ -1,11 +1,11 @@
 # Speaker TTS
 import pyttsx3
 from mcal import cache
-#from typing import Optional
+# from typing import Optional
 
 
 # engine: Optional[pyttsx3.Engine] = None
-
+# TODO: Fix this library
 
 def init():
     pass
