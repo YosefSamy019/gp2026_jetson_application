@@ -1,3 +1,4 @@
 logs.txt
 snapshot/
 *.exe
+_CACHE/
