@@ -96,7 +96,7 @@ class YOLODetector:
         # BGR to RGB, HWC to CHW, Normalize
         blob = img_padded[:, :, ::-1].transpose(2, 0, 1)
         blob = np.expand_dims(blob, axis=0) / 255.0
-        blob = blob.astype(np.float16)
+        blob = blob.astype(np.float32)
 
         # 2. Run Inference
         print("Model:", self.model_name)
