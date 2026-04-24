@@ -30,13 +30,13 @@ class YOLODetector:
                     f"Load {self.model_name} on GPU",
                     logs.LogLevel.INFO
                 )
-
-            # CPU fallback always
-            self.providers.append("CPUExecutionProvider")
-            logs.add_log(
-                f"Load {self.model_name} on CPU",
-                logs.LogLevel.INFO
-            )
+            else:
+                # CPU fallback always
+                self.providers.append("CPUExecutionProvider")
+                logs.add_log(
+                    f"Load {self.model_name} on CPU",
+                    logs.LogLevel.INFO
+                )
 
             # Initialize ONNX session
             self.session = ort.InferenceSession(
