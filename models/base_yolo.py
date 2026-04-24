@@ -95,7 +95,8 @@ class YOLODetector:
         img_padded, r, dw, dh = self._letterbox(image)
         # BGR to RGB, HWC to CHW, Normalize
         blob = img_padded[:, :, ::-1].transpose(2, 0, 1)
-        blob = np.expand_dims(blob, axis=0).astype(np.float16) / 255.0
+        blob = np.expand_dims(blob, axis=0) / 255.0
+        blob = blob.astype(np.float16)
 
         # 2. Run Inference
         outputs = self.session.run(None, {self.input_name: blob})
