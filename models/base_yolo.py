@@ -95,11 +95,11 @@ class YOLODetector:
         img_padded, r, dw, dh = self._letterbox(image)
         # BGR to RGB, HWC to CHW, Normalize
         blob = img_padded[:, :, ::-1].transpose(2, 0, 1)
-        blob = np.expand_dims(blob, axis=0).astype(np.float32) / 255.0
+        blob = np.expand_dims(blob, axis=0).astype(np.float16) / 255.0
 
         # 2. Run Inference
         outputs = self.session.run(None, {self.input_name: blob})
-        predictions = outputs[0][0]  # (300, 6)
+        predictions = outputs[0][0].astype(np.float32)
         print('OUTPUT MAX VAL:', np.max(predictions))
         print('OUTPUT MIN VAL:', np.min(predictions))
         print('OUTPUT SHAPE:', predictions.shape)
