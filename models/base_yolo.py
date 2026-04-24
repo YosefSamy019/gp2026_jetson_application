@@ -52,13 +52,8 @@ class YOLODetector:
 
             logs.add_log(
                 "Model {} initialized. {} classes loaded.".format(
-                    model_path, len(self.class_names)
+                    self.model_name, len(self.class_names)
                 ),
-                logs.LogLevel.INFO
-            )
-
-            logs.add_log(
-                "Active ONNX providers: {}".format(self.session.get_providers()),
                 logs.LogLevel.INFO
             )
 
