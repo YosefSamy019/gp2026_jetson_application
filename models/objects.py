@@ -17,7 +17,7 @@ def init():
 
 def objects_model(image: np.ndarray):
     global _objects_model
-    return []
+    # return []
 
-    # detections = _objects_model(image)
-    # return detections
+    detections = _objects_model(image)
+    return detections
