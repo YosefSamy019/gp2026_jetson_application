@@ -100,6 +100,9 @@ class YOLODetector:
         # 2. Run Inference
         outputs = self.session.run(None, {self.input_name: blob})
         predictions = outputs[0][0]  # (300, 6)
+        print('OUTPUT MAX VAL:', np.max(predictions))
+        print('OUTPUT MIN VAL:', np.min(predictions))
+        print('OUTPUT SHAPE:', predictions.shape)
         # print(predictions)
         # 3. Filter for NMS
         raw_boxes, scores, class_ids = [], [], []
