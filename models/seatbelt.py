@@ -19,5 +19,5 @@ def seatbelt_model(image: np.ndarray):
     global _seatbelt_yolo
     return []
 
-    # detections = _seatbelt_yolo(image)
-    # return detections
+    detections = _seatbelt_yolo(image)
+    return detections
