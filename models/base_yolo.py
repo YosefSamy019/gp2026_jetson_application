@@ -99,6 +99,7 @@ class YOLODetector:
         blob = blob.astype(np.float16)
 
         # 2. Run Inference
+        print("Model:", self.model_name)
         outputs = self.session.run(None, {self.input_name: blob})
         predictions = outputs[0][0].astype(np.float32)
         print('OUTPUT MAX VAL:', np.max(predictions))
