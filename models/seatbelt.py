@@ -9,14 +9,15 @@ _seatbelt_yolo: Optional[YOLODetector] = None
 
 def init():
     global _seatbelt_yolo
-    _seatbelt_yolo = YOLODetector(
-        model_path=assets_manager.SEATBELT_YOLO_MODEL_PATH,
-        classes_path=assets_manager.SEATBELT_YOLO_CLASSES_PATH,
-    )
+    # _seatbelt_yolo = YOLODetector(
+    #     model_path=assets_manager.SEATBELT_YOLO_MODEL_PATH,
+    #     classes_path=assets_manager.SEATBELT_YOLO_CLASSES_PATH,
+    # )
 
 
 def seatbelt_model(image: np.ndarray):
     global _seatbelt_yolo
+    return []
 
-    detections = _seatbelt_yolo(image)
-    return detections
+    # detections = _seatbelt_yolo(image)
+    # return detections
