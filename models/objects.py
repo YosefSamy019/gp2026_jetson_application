@@ -9,14 +9,15 @@ _objects_model: Optional[YOLODetector] = None
 
 def init():
     global _objects_model
-    _objects_model = YOLODetector(
-        model_path=assets_manager.OBJECTS_YOLO_MODEL_PATH,
-        classes_path=assets_manager.OBJECTS_YOLO_CLASSES_PATH,
-    )
+    # _objects_model = YOLODetector(
+    #     model_path=assets_manager.OBJECTS_YOLO_MODEL_PATH,
+    #     classes_path=assets_manager.OBJECTS_YOLO_CLASSES_PATH,
+    # )
 
 
 def objects_model(image: np.ndarray):
     global _objects_model
+    return []
 
-    detections = _objects_model(image)
-    return detections
+    # detections = _objects_model(image)
+    # return detections
