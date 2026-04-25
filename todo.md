@@ -17,10 +17,12 @@
 
 # Ongoing
 
-
-
 # Late
 
 - TODO BACKEND API implement and face recognition
 - TODO add STM32 network code -> Yosef
 - Seatbelt: Detect 2 boxes at same person 
+- Refactor screen navigation UI
+- rebuild yolo with NMS=False, Dynamic=False
+- Move my Yolo workspace to KAGGLE
+- Ensure OpenCv GPU is on
