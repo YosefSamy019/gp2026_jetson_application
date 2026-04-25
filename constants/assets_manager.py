@@ -17,5 +17,5 @@ EYE_POINTS_PATH = _wrap_path('eye_model', 'points.txt')
 OBJECTS_YOLO_MODEL_PATH = _wrap_path('objects_detection.onnx')
 OBJECTS_YOLO_CLASSES_PATH = _wrap_path('objects_detection_classes.json')
 
-SEATBELT_YOLO_MODEL_PATH = _wrap_path('seatbelt.onnx')
+SEATBELT_YOLO_MODEL_PATH = _wrap_path('seatbelt_detection.onnx')
 SEATBELT_YOLO_CLASSES_PATH = _wrap_path('seatbelt_classes.json')
