@@ -1,4 +1,4 @@
-UI_UPDATE_SLEEP_TIME = int(0.010 * 1000) # Must be millisecond
+UI_UPDATE_SLEEP_TIME = int(0.010 * 1000)  # Must be millisecond
 
 CAMERA_TASK_SLEEP_TIME = 0.010
 LENS_TASK_SLEEP_TIME = 0.010

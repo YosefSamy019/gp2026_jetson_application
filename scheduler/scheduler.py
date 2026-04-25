@@ -1,10 +1,13 @@
 import threading
+import time
+from typing import List
 
 from scheduler.many_items_queue import ManyItemsQueue
 from scheduler.single_item_queue import SingleItemQueue
+from scheduler.task import Task
 
 # CODE
-_tasks_list = []
+_tasks_list: List[Task] = []
 _locks_list = []
 _queue_list = []
 
@@ -42,40 +45,32 @@ def create_list_queue(name):
         return None
 
 
-def create_task(fun_code, task_name):
+def create_task(task: Task):
     global _tasks_list
 
-    # remove dead tasks
-    _tasks_list = list(filter(lambda t: t.is_alive(), _tasks_list))
-
-    # check if the task is repeated
-    if task_name not in list(map(lambda x: x.name, _tasks_list)):
-        # create a task
-        task = threading.Thread(target=fun_code, daemon=True, name=task_name)
-
-        _tasks_list.append(task)
-        task.start()
-
-        return 1
-    else:
-        return 0
+    task_thread = threading.Thread(target=lambda: task.engine(), daemon=True, name=task.name)
+    _tasks_list.append(task)
+    task_thread.start()
 
 
 def get_report():
     return_dict = dict()
 
     return_dict['tasks'] = [
-        f"Task: {x.name}"
+        f"Task: {x.name}\n"
+        f"\t-periodicity={x.get_avg_periodicity():0.3f}"
         for x in _tasks_list
     ]
 
     return_dict['locks'] = [
-        f"Lock: {x[0]}; State: {x[1].locked()}"
+        f"Lock: {x[0]}\n"
+        f"\t-state={x[1].locked()}"
         for x in _locks_list
     ]
 
     return_dict['queues'] = [
-        f"Queue: {x[0]}; Content:{x[1].len()}"
+        f"Queue: {x[0]}\n"
+        f"\t-content_len={x[1].len()}"
         for x in _queue_list
     ]
 

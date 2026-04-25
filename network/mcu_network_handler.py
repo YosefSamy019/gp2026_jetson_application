@@ -5,89 +5,90 @@ from mcal import logs
 from scheduler import scheduler
 from mcal.serial_comm import read_buffer
 import app.pipe_line.signals as signals
+from scheduler.task import Task
 
 
 # Code
 def init():
-    scheduler.create_task(mcu_network_session_task, "mcu_network_session_task")
+    scheduler.create_task(MCUNetworkTask())
 
 
-def mcu_network_session_task():
-    global_t_val = 0
-    global_f_val = 0
-    global_a_val = 0
-    global_last_receive_time = time.time()
-    global_slave_active = False
-    trip_state_counter = 1
+class MCUNetworkTask(Task):
+    def __init__(self):
+        super().__init__(
+            name='MCUNetworkTask',
+            periodicity=timing.MCU_NETWORK_TASK_SLEEP_TIME
+        )
 
-    current_buffer = ""
+    def start(self):
+        self.global_t_val = 0
+        self.global_f_val = 0
+        self.global_a_val = 0
+        self.global_last_receive_time = time.time()
+        self.global_slave_active = False
+        self.trip_state_counter = 1
 
-    gen = read_buffer()
+        self.current_buffer = ""
 
-    while True:
-        try:
-            # Read Buffer
-            character = next(gen)
-            if character:
-                current_buffer += character
-                current_buffer = current_buffer.strip()
-                global_last_receive_time = time.time()
+        self.gen = read_buffer()
 
-            # Check the buffer
-            if len(current_buffer) > 0 and current_buffer[-1] == "[":
-                # Bad Data
-                current_buffer = ""
+    def update(self):
+        # Read Buffer
+        character = next(self.gen)
+        if character:
+            self.current_buffer += character
+            self.current_buffer = self.current_buffer.strip()
+            self.global_last_receive_time = time.time()
 
-            # Decompose the buffer
-            if len(current_buffer) > 0 and current_buffer[-1] == "]":
-                decomposed_values = _decompose_buffer(current_buffer)
-                current_buffer = ""
-                global_t_val = decomposed_values.get("T", global_t_val)
-                global_f_val = decomposed_values.get("F", global_f_val)
-                global_a_val = decomposed_values.get("A", global_a_val)
+        # Check the buffer
+        if len(self.current_buffer) > 0 and self.current_buffer[-1] == "[":
+            # Bad Data
+            self.current_buffer = ""
 
-            # Slave Active
-            global_slave_active = (time.time() - global_last_receive_time) < 1.0
-            if not global_slave_active:
-                logs.add_log(f"network_session_task: Receiver is not responding", logs.LogLevel.ERROR)
+        # Decompose the buffer
+        if len(self.current_buffer) > 0 and self.current_buffer[-1] == "]":
+            decomposed_values = self._decompose_buffer(self.current_buffer)
+            self.current_buffer = ""
+            self.global_t_val = decomposed_values.get("T", self.global_t_val)
+            self.global_f_val = decomposed_values.get("F", self.global_f_val)
+            self.global_a_val = decomposed_values.get("A", self.global_a_val)
 
-            # Send data to queue
-            signals.mcu_network_queue.put(
-                {
-                    "T": global_t_val,
-                    "F": global_f_val,
-                    "A": global_a_val,
-                    "buffer": current_buffer,
-                    "last_receive_time": global_last_receive_time,
-                    "time_gone_from_last_receive": time.time() - global_last_receive_time,
-                    "slave_active": global_slave_active,
-                }
-            )
+        # Slave Active
+        self.global_slave_active = (time.time() - self.global_last_receive_time) < 1.0
+        if not self.global_slave_active:
+            logs.add_log(f"network_session_task: Receiver is not responding", logs.LogLevel.ERROR)
 
-            signals.trip_status_queue.put(trip_state_counter)
-            trip_state_counter += 1
+        # Send data to queue
+        signals.mcu_network_queue.put(
+            {
+                "T": self.global_t_val,
+                "F": self.global_f_val,
+                "A": self.global_a_val,
+                "buffer": self.current_buffer,
+                "last_receive_time": self.global_last_receive_time,
+                "time_gone_from_last_receive": time.time() - self.global_last_receive_time,
+                "slave_active": self.global_slave_active,
+            }
+        )
 
-        except Exception as e:
-            logs.add_log(f"mcu_network_session_task: error {e}", logs.LogLevel.ERROR)
+        signals.trip_status_queue.put(self.trip_state_counter)
+        self.trip_state_counter += 1
 
-        time.sleep(timing.MCU_NETWORK_TASK_SLEEP_TIME)
+    def _decompose_buffer(self, txt: str):
+        txt = txt.upper()
 
+        t_val = re.findall(r"T:(\d+)", txt)
+        f_val = re.findall(r"F:(\d+)", txt)
+        a_val = re.findall(r"A:(\d+)", txt)
 
-def _decompose_buffer(txt: str):
-    txt = txt.upper()
+        data = {}
+        if t_val:
+            data["T"] = t_val[0]
 
-    t_val = re.findall(r"T:(\d+)", txt)
-    f_val = re.findall(r"F:(\d+)", txt)
-    a_val = re.findall(r"A:(\d+)", txt)
+        if f_val:
+            data["F"] = f_val[0]
 
-    data = {}
-    if t_val:
-        data["T"] = t_val[0]
+        if a_val:
+            data["A"] = a_val[0]
 
-    if f_val:
-        data["F"] = f_val[0]
-
-    if a_val:
-        data["A"] = a_val[0]
-
-    return data
+        return data

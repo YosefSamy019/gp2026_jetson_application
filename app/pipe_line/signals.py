@@ -1,6 +1,6 @@
 from scheduler.scheduler import *
 
-camera_output_queue = create_queue('camera_output_queue', True)
+camera_output_queue = create_queue('camera_output_queue', False)
 lens_output_queue = create_queue('lens_output_queue', False)
 object_detector_yolo_queue = create_queue('object_detector_yolo_queue', False)
 seatbelt_detector_yolo_queue = create_queue('seatbelt_detector_yolo_queue', False)
