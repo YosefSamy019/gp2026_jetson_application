@@ -13,9 +13,6 @@ class FaceExtractorTask(Task):
     def __init__(self, name: str, periodicity: float):
         super().__init__(name, periodicity)
 
-        self.mp_face = None
-
-    def start(self):
         self.mp_face = mp.solutions.face_mesh.FaceMesh(
             max_num_faces=1,
             static_image_mode=True,
@@ -51,7 +48,7 @@ class FaceExtractorTask(Task):
                     face_found=True,
                     face_points_matrix=face_array,
                     face_points_flattened=face_array.flatten(),
-                    raw_land_marks=face_landmarks.landmark
+                    raw_land_marks=face_landmarks
                 )
             )
         else:

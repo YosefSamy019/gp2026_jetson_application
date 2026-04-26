@@ -65,10 +65,10 @@ class DriverTrackerTaskOutput:
 
 @dataclass(frozen=True)
 class FaceClipperRecognizerTaskOutput:
-    driver_id: int
-    driver_name: str
-    driver_age: int
-    driver_image_url: str
+    driver_id: Optional[int]
+    driver_name: Optional[str]
+    driver_age: Optional[int]
+    driver_image_url: Optional[str]
 
 
 @dataclass(frozen=True)
@@ -77,13 +77,13 @@ class SeatbeltDetectorTaskOutput:
     is_seatbelt_off: Optional[bool]
     probability: Optional[float]
     is_no_detection: bool
-    object_xyxy: Optional[Tuple[float, float, float, float]]
+    object_xyxy: Optional[Tuple[int, int, int, int]]
 
 
 @dataclass(frozen=True)
 class _SingleObjectsDetectorTaskOutput:
     object_name: str
-    object_xyxy: Tuple[float, float, float, float]
+    object_xyxy: Tuple[int, int, int, int]
     object_probability: float
 
 

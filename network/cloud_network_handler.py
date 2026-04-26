@@ -1,25 +1,28 @@
 import time
+from typing import List
+
 from app.pipe_line import timing
 from app.pipe_line import signals
 from mcal import logs
 from mcal import wifi
+from network.models.models import MCUNetworkDataModel
 from scheduler import scheduler
 from scheduler.task import Task
 
 
 # Code
 def init():
-    scheduler.register_task(CloudNetworkSessionTask())
+    scheduler.register_task(CloudNetworkSessionTask(
+        name='CloudNetworkSessionTask',
+        periodicity=timing.CLOUD_NETWORK_TASK_SLEEP_TIME
+    ))
 
 
 class CloudNetworkSessionTask(Task):
-    def __init__(self):
-        super().__init__(
-            name='CloudNetworkSessionTask',
-            periodicity=timing.CLOUD_NETWORK_TASK_SLEEP_TIME
-        )
 
-    def start(self):
+    def __init__(self, name: str, periodicity: float):
+        super().__init__(name, periodicity)
+
         self.get_current_time_function = lambda: time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
         self.device_id: int = 1  # Dont change forever
@@ -38,19 +41,7 @@ class CloudNetworkSessionTask(Task):
 
     def update(self):
         # get data from sensors
-        mcu_data = signals.mcu_network_queue.get()
-
+        mcu_data: List[MCUNetworkDataModel] = signals.mcu_network_queue.pop_all()
         current_timestamp = self.get_current_time_function()
-
-        self.rotation_x = mcu_data.get("rotation_x", None)
-        self.rotation_y = mcu_data.get("rotation_y", None)
-        self.rotation_z = mcu_data.get("rotation_z", None)
-
-        self.location_long = mcu_data.get("location_long", None)
-        self.location_lat = mcu_data.get("location_lat", None)
-
-        self.flame_sensor = mcu_data.get("flame_sensor", None)
-        self.temperature = mcu_data.get("temperature", None)
-        self.btn_status = mcu_data.get("btn_status", None)
 
         # call wifi endpoints

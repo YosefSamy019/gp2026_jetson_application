@@ -2,6 +2,7 @@ import time
 import re
 from app.pipe_line import timing
 from mcal import logs
+from network.models.models import MCUNetworkDataModel
 from scheduler import scheduler
 from mcal.serial_comm import read_buffer
 import app.pipe_line.signals as signals
@@ -10,17 +11,16 @@ from scheduler.task import Task
 
 # Code
 def init():
-    scheduler.register_task(MCUNetworkTask())
+    scheduler.register_task(MCUNetworkTask(
+        name='MCUNetworkTask',
+        periodicity=timing.MCU_NETWORK_TASK_SLEEP_TIME
+    ))
 
 
 class MCUNetworkTask(Task):
-    def __init__(self):
-        super().__init__(
-            name='MCUNetworkTask',
-            periodicity=timing.MCU_NETWORK_TASK_SLEEP_TIME
-        )
+    def __init__(self, name: str, periodicity: float):
+        super().__init__(name, periodicity)
 
-    def start(self):
         self.global_t_val = 0
         self.global_f_val = 0
         self.global_a_val = 0
@@ -60,15 +60,15 @@ class MCUNetworkTask(Task):
 
         # Send data to queue
         signals.mcu_network_queue.put(
-            {
-                "T": self.global_t_val,
-                "F": self.global_f_val,
-                "A": self.global_a_val,
-                "buffer": self.current_buffer,
-                "last_receive_time": self.global_last_receive_time,
-                "time_gone_from_last_receive": time.time() - self.global_last_receive_time,
-                "slave_active": self.global_slave_active,
-            }
+            MCUNetworkDataModel(
+                T=self.global_t_val,
+                F=self.global_f_val,
+                A=self.global_a_val,
+                buffer=self.current_buffer,
+                last_receive_time=self.global_last_receive_time,
+                time_gone_from_last_receive=time.time() - self.global_last_receive_time,
+                slave_active=self.global_slave_active,
+            )
         )
 
         signals.trip_status_queue.put(self.trip_state_counter)

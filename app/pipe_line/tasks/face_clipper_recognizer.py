@@ -27,6 +27,14 @@ class FaceClipperRecognizerTask(Task):
 
         if driver_tracker_out is None or driver_tracker_out.driver_has_changed:
             self.driver_id = None
+            signals.face_clipper_recognizer_queue.put(
+                FaceClipperRecognizerTaskOutput(
+                    driver_id=None,
+                    driver_name=None,
+                    driver_age=None,
+                    driver_image_url=None,
+                )
+            )
 
         if self.driver_id is None:
             self._detect_driver()

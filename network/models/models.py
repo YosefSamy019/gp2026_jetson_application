@@ -17,6 +17,6 @@ class MCUNetworkDataModel:
     F: float
     A: float
     buffer: str
-    last_receive_time: datetime.time
+    last_receive_time: float
     time_gone_from_last_receive: float
     slave_active: bool

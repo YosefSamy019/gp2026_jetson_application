@@ -15,13 +15,11 @@ class SpeakerDetectorTask(Task):
     def __init__(self, name: str, periodicity: float):
         super().__init__(name, periodicity)
 
-
-    def start(self):
         self.look_up_table = json.load(open(assets_manager.LOOK_UP_TABLE_PATH))
         self.intents_batch = []
 
     def update(self):
-        cur_intents = signals.speaker_queue.get_all()
+        cur_intents = signals.speaker_queue.pop_all()
 
         if len(cur_intents) > 0:
             self.intents_batch.extend(cur_intents)

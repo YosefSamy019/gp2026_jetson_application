@@ -51,7 +51,13 @@ def _upper_ui_task_update_logs():
     variable_scheduler.set(str(json.dumps(scheduler.get_report())))
 
     # Read Network
-    variable_network.set(str(json.dumps(signals.mcu_network_queue.get_immediate(fallback_value={}))))
+    # TODO Replace HASH
+    temp_mcu = signals.mcu_network_queue.get_last()
+    if temp_mcu:
+        variable_network.set(str(json.dumps(temp_mcu.__dict__)))
 
     # Driver
-    variable_driver.set(str(json.dumps(signals.face_clipper_recognizer_queue.get_immediate(fallback_value={}))))
+    # TODO Replace HASH
+    temp_face_clipper_recognizer = signals.face_clipper_recognizer_queue.get_last()
+    if temp_face_clipper_recognizer:
+        variable_driver.set(str(json.dumps(temp_face_clipper_recognizer.__dict__)))
