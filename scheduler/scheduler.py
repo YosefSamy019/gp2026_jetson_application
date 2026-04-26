@@ -58,7 +58,7 @@ def get_report():
 
     return_dict['tasks'] = [
         f"Task: {x.name}\n"
-        f"\t-periodicity={x.get_avg_periodicity():0.3f}"
+        f"\t-periodicity={x.get_avg_periodicity():0.3f}#{x.get_exact_periodicity():0.3f}"
         for x in _tasks_list
     ]
 

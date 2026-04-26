@@ -23,8 +23,7 @@ class EyeOpenCloseTask(Task):
         temp_vector = signals.driver_detector_queue.get()["face_points_flattened"]
 
         if temp_vector is not None:
-            with signals.cpu_ml_lock:
-                ear_avg = eye.eye_model(temp_vector)
+            ear_avg = eye.eye_model(temp_vector)
 
             # eye is close when (EAR < 0.25)
             eye_flag = (ear_avg < 0.25)

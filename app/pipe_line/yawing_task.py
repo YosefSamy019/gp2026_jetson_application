@@ -21,9 +21,8 @@ class YawingTask(Task):
         temp_vector = signals.driver_detector_queue.get()["face_points_flattened"]
 
         if temp_vector is not None:
-            with signals.cpu_ml_lock:
-                # Call it every 100ms with the latest face vector.
-                prediction = yawing.yawing_model(temp_vector)
+            # Call it every 100ms with the latest face vector.
+            prediction = yawing.yawing_model(temp_vector)
 
             yawing_flag = (prediction >= 0.6)
             self.yawing_class = ["Normal", "Yawning"][int(yawing_flag)]

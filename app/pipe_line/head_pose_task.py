@@ -21,8 +21,7 @@ class HeadPoseTask(Task):
         temp_vector = signals.driver_detector_queue.get()["face_points_flattened"]
 
         if temp_vector is not None:
-            with signals.cpu_ml_lock:
-                cur_class, cur_prop = head_pose.head_pose_model(temp_vector)
+            cur_class, cur_prop = head_pose.head_pose_model(temp_vector)
 
             signals.head_pose_queue.put(
                 {"class": cur_class,

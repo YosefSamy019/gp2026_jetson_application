@@ -58,3 +58,6 @@ class Task(ABC):
             return sum(self._engine_deltas_calls) / len(self._engine_deltas_calls)
         else:
             return 0
+
+    def get_exact_periodicity(self) -> float:
+        return self.periodicity

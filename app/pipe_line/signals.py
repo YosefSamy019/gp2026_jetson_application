@@ -20,4 +20,3 @@ violations_queue = create_list_queue('violations_queue')
 mcu_network_queue = create_queue('mcu_network_queue', False)
 
 gpu_yolo_lock = create_lock('gpu_yolo_lock')
-cpu_ml_lock = create_lock('cpu_ml_lock')
