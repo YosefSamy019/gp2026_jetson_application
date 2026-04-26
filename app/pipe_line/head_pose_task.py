@@ -7,11 +7,9 @@ import app.pipe_line.timing as timing
 import app.look_up_keys as look_up_keys
 
 class HeadPoseTask(Task):
-    def __init__(self):
-        super().__init__(
-            name='HeadPoseTask',
-            periodicity=timing.HEAD_POSE_TASK_SLEEP_TIME
-        )
+    def __init__(self, name: str, periodicity: float):
+        super().__init__(name, periodicity)
+
 
     def start(self):
         self.head_pose_start = None

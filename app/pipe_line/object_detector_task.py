@@ -8,11 +8,9 @@ from scheduler.task import Task
 
 
 class ObjectDetectorTask(Task):
-    def __init__(self):
-        super().__init__(
-            name='ObjectDetectorTask',
-            periodicity=timing.OBJECTS_DETECTOR_TASK_SLEEP_TIME
-        )
+    def __init__(self, name: str, periodicity: float):
+        super().__init__(name, periodicity)
+
 
     def start(self):
         self.previous_trip_status = None

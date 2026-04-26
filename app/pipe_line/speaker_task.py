@@ -12,11 +12,9 @@ from scheduler.task import Task
 
 
 class SpeakerDetectorTask(Task):
-    def __init__(self):
-        super().__init__(
-            name='SpeakerDetectorTask',
-            periodicity=timing.SPEAKER_TASK_SLEEP_TIME
-        )
+    def __init__(self, name: str, periodicity: float):
+        super().__init__(name, periodicity)
+
 
     def start(self):
         self.look_up_table = json.load(open(assets_manager.LOOK_UP_TABLE_PATH))

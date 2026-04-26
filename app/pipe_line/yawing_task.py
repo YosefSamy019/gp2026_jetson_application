@@ -8,11 +8,8 @@ from scheduler.task import Task
 
 
 class YawingTask(Task):
-    def __init__(self):
-        super().__init__(
-            name='YawingTask',
-            periodicity=timing.YAWING_TASK_SLEEP_TIME
-        )
+    def __init__(self, name: str, periodicity: float):
+        super().__init__(name, periodicity)
 
     def start(self):
         self.yawing_class = None

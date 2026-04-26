@@ -8,11 +8,9 @@ import app.look_up_keys as look_up_keys
 
 
 class EyeOpenCloseTask(Task):
-    def __init__(self):
-        super().__init__(
-            name='EyeOpenCloseTask',
-            periodicity=timing.EYE_OPEN_CLOSE_TASK_SLEEP_TIME
-        )
+    def __init__(self, name: str, periodicity: float):
+        super().__init__(name, periodicity)
+
 
     def start(self):
         self.eye_closed_start = None

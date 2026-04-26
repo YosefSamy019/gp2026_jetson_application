@@ -14,11 +14,9 @@ from scheduler.task import Task
 
 
 class FaceClipperRecognizerTask(Task):
-    def __init__(self):
-        super().__init__(
-            name='FaceClipperRecognizerTask',
-            periodicity=timing.FACE_CLIPPER_RECOGNIZE_TASK_SLEEP_TIME
-        )
+    def __init__(self, name: str, periodicity: float):
+        super().__init__(name, periodicity)
+
 
     def start(self):
         self.counter = 0

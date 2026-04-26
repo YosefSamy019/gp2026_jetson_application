@@ -8,11 +8,9 @@ from scheduler.task import Task
 
 
 class LensSoftwareTask(Task):
-    def __init__(self):
-        super().__init__(
-            name='LensSoftwareTask',
-            periodicity=timing.LENS_TASK_SLEEP_TIME
-        )
+    def __init__(self, name: str, periodicity: float):
+        super().__init__(name, periodicity)
+
 
     def start(self):
         pass

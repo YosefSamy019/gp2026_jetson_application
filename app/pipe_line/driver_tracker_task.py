@@ -7,11 +7,9 @@ from scheduler.task import Task
 
 
 class DriverTrackerTask(Task):
-    def __init__(self):
-        super().__init__(
-            name='DriverTracker',
-            periodicity=timing.DRIVER_TRACKER_TASK_SLEEP_TIME
-        )
+    def __init__(self, name: str, periodicity: float):
+        super().__init__(name, periodicity)
+
 
     def start(self):
         self.last_x = None

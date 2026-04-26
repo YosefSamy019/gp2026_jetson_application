@@ -1,4 +1,5 @@
 import scheduler.scheduler as scheduler
+import app.pipe_line.timing as timing
 
 from app.pipe_line.camera_task import CameraTask
 from app.pipe_line.face_clipper_recognizer import FaceClipperRecognizerTask
@@ -15,15 +16,62 @@ from app.pipe_line.object_detector_task import ObjectDetectorTask
 
 
 def pipeline_init():
-    scheduler.register_task(CameraTask())
-    scheduler.register_task(LensSoftwareTask())
-    scheduler.register_task(ObjectDetectorTask())
-    scheduler.register_task(SeatbeltDetectorTask())
-    scheduler.register_task(FaceExtractorTask())
-    scheduler.register_task(DriverDetectorTask())
-    scheduler.register_task(DriverTrackerTask())
-    scheduler.register_task(FaceClipperRecognizerTask())
-    scheduler.register_task(EyeOpenCloseTask())
-    scheduler.register_task(YawingTask())
-    scheduler.register_task(HeadPoseTask())
-    scheduler.register_task(SpeakerDetectorTask())
+    scheduler.register_task(CameraTask(
+        name='camera_task',
+        periodicity=timing.CAMERA_TASK_SLEEP_TIME,
+    ))
+
+    scheduler.register_task(LensSoftwareTask(
+        name='lens_software_task',
+        periodicity=timing.LENS_TASK_SLEEP_TIME,
+    ))
+
+    scheduler.register_task(ObjectDetectorTask(
+        name='object_detector_task',
+        periodicity=timing.OBJECTS_DETECTOR_TASK_SLEEP_TIME,
+    ))
+
+    scheduler.register_task(SeatbeltDetectorTask(
+        name='seatbelt_detector_task',
+        periodicity=timing.SEATBELT_DETECTOR_TASK_SLEEP_TIME,
+    ))
+
+    scheduler.register_task(FaceExtractorTask(
+        name='face_extractor_task',
+        periodicity=timing.FACE_EXTRACTOR_TASK_SLEEP_TIME,
+    ))
+
+    scheduler.register_task(DriverDetectorTask(
+        name='driver_detector_task',
+        periodicity=timing.DRIVER_DETECT_TASK_SLEEP_TIME,
+    ))
+
+    scheduler.register_task(DriverTrackerTask(
+        name='driver_tracker_task',
+        periodicity=timing.DRIVER_TRACKER_TASK_SLEEP_TIME,
+    ))
+
+    scheduler.register_task(FaceClipperRecognizerTask(
+        name='face_clipper_recognizer_task',
+        periodicity=timing.FACE_CLIPPER_RECOGNIZE_TASK_SLEEP_TIME,
+    ))
+
+    scheduler.register_task(EyeOpenCloseTask(
+        name='eye_open_close_task',
+        periodicity=timing.EYE_OPEN_CLOSE_TASK_SLEEP_TIME,
+    ))
+
+    scheduler.register_task(YawingTask(
+        name='yawing_task',
+        periodicity=timing.YAWING_TASK_SLEEP_TIME,
+    ))
+
+    scheduler.register_task(HeadPoseTask(
+        name='head_pose_task',
+        periodicity=timing.HEAD_POSE_TASK_SLEEP_TIME,
+    ))
+
+    scheduler.register_task(SpeakerDetectorTask(
+        name='speaker_detector_task',
+        periodicity=timing.SPEAKER_TASK_SLEEP_TIME,
+    ))
