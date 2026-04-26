@@ -1,15 +1,13 @@
 import threading
-import time
 from typing import List
 
-from scheduler.many_items_queue import ManyItemsQueue
-from scheduler.single_item_queue import SingleItemQueue
 from scheduler.task import Task
+from scheduler.items_queue import ItemsQueue
 
 # CODE
 _tasks_list: List[Task] = []
 _locks_list = []
-_queue_list = []
+_queue_list: List[ItemsQueue] = []
 
 
 def create_lock(name):
@@ -23,29 +21,14 @@ def create_lock(name):
         return None
 
 
-def create_queue(name, is_volatile: bool):
+def register_queue(item_queue: ItemsQueue) -> ItemsQueue:
     global _queue_list
 
-    if name not in list(map(lambda t: t[0], _queue_list)):
-        q = SingleItemQueue(is_volatile)
-        _queue_list.append((name, q))
-        return q
-    else:
-        return None
+    _queue_list.append(item_queue)
+    return item_queue
 
 
-def create_list_queue(name):
-    global _queue_list
-
-    if name not in list(map(lambda t: t[0], _queue_list)):
-        q = ManyItemsQueue()
-        _queue_list.append((name, q))
-        return q
-    else:
-        return None
-
-
-def create_task(task: Task):
+def register_task(task: Task):
     global _tasks_list
 
     task_thread = threading.Thread(target=lambda: task.engine(), daemon=True, name=task.name)
@@ -69,8 +52,8 @@ def get_report():
     ]
 
     return_dict['queues'] = [
-        f"Queue: {x[0]}\n"
-        f"\t-content_len={x[1].len()}"
+        f"Queue: {x.get_name()}\n"
+        f"\t-content_len={len(x)}"
         for x in _queue_list
     ]
 

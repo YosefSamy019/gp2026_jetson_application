@@ -10,7 +10,7 @@ from scheduler.task import Task
 
 # Code
 def init():
-    scheduler.create_task(MCUNetworkTask())
+    scheduler.register_task(MCUNetworkTask())
 
 
 class MCUNetworkTask(Task):

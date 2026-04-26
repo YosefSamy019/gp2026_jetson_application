@@ -9,7 +9,7 @@ from scheduler.task import Task
 
 # Code
 def init():
-    scheduler.create_task(ViolationNetworkSession())
+    scheduler.register_task(ViolationNetworkSession())
 
 
 class ViolationNetworkSession(Task):

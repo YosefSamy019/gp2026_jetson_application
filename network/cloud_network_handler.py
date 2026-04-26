@@ -9,7 +9,7 @@ from scheduler.task import Task
 
 # Code
 def init():
-    scheduler.create_task(CloudNetworkSessionTask())
+    scheduler.register_task(CloudNetworkSessionTask())
 
 
 class CloudNetworkSessionTask(Task):
