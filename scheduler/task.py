@@ -16,19 +16,10 @@ class Task(ABC):
             maxlen=math.ceil(5 / self.periodicity))  # Store statistics over last 5 seconds
 
     @abstractmethod
-    def start(self):
-        raise NotImplementedError
-
-    @abstractmethod
     def update(self):
         raise NotImplementedError
 
     def engine(self):
-        try:
-            self.start()
-        except Exception as e:
-            logs.add_log(f"Task: {self.name}, Error: {e}", logs.LogLevel.ERROR)
-
         while True:
             self._engine_ticker()
 

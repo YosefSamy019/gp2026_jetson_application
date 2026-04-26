@@ -1,3 +1,4 @@
+from app.pipe_line.models.models import DriverTrackerTaskOutput
 from mcal import logs
 import app.pipe_line.signals as signals
 import time
@@ -10,16 +11,20 @@ class DriverTrackerTask(Task):
     def __init__(self, name: str, periodicity: float):
         super().__init__(name, periodicity)
 
-
-    def start(self):
         self.last_x = None
         self.last_y = None
 
     def update(self):
-        face_points_matrix = signals.driver_detector_queue.get()["face_points_matrix"]
+        driver_detector_out = signals.driver_detector_queue.get_last()
 
-        cur_frame_x = face_points_matrix[:, 0] if face_points_matrix is not None else None
-        cur_frame_y = face_points_matrix[:, 1] if face_points_matrix is not None else None
+        if driver_detector_out is None:
+            return
+
+        cur_frame_x = driver_detector_out.face_points_matrix[
+            :, 0] if driver_detector_out.face_points_matrix is not None else None
+
+        cur_frame_y = driver_detector_out.face_points_matrix[
+            :, 1] if driver_detector_out.face_points_matrix is not None else None
 
         if self.last_x is not None and cur_frame_x is not None:
             last_pivot_x = np.mean(self.last_x)
@@ -32,18 +37,18 @@ class DriverTrackerTask(Task):
 
             # Todo Adjust the threshold
             if dis > 0.15:
-                signals.driver_tracker_queue.put({
-                    "value": True,
-                })  # Detect the driver
+                signals.driver_tracker_queue.put(DriverTrackerTaskOutput(
+                    driver_has_changed=True
+                ))
             else:
-                signals.driver_tracker_queue.put({
-                    "value": False,
-                })  # Dont Detect the driver
+                signals.driver_tracker_queue.put(DriverTrackerTaskOutput(
+                    driver_has_changed=False
+                ))
 
         else:
-            signals.driver_tracker_queue.put({
-                "value": True,
-            })  # Detect the driver
+            signals.driver_tracker_queue.put(DriverTrackerTaskOutput(
+                driver_has_changed=True
+            ))
 
         self.last_x = cur_frame_x
         self.last_y = cur_frame_y

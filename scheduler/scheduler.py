@@ -1,5 +1,5 @@
 import threading
-from typing import List
+from typing import List, TypeVar
 
 from scheduler.task import Task
 from scheduler.items_queue import ItemsQueue
@@ -21,7 +21,10 @@ def create_lock(name):
         return None
 
 
-def register_queue(item_queue: ItemsQueue) -> ItemsQueue:
+T = TypeVar("T")
+
+
+def register_queue(item_queue: ItemsQueue[T]) -> ItemsQueue[T]:
     global _queue_list
 
     _queue_list.append(item_queue)

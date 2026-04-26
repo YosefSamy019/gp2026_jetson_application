@@ -1,6 +1,7 @@
 import time
 import numpy as np
 import app.pipe_line.signals as signals
+from app.pipe_line.models.models import FaceExtractorTaskOutput
 from mcal import logs
 
 import mediapipe as mp
@@ -12,14 +13,23 @@ class FaceExtractorTask(Task):
     def __init__(self, name: str, periodicity: float):
         super().__init__(name, periodicity)
 
+        self.mp_face = None
+
     def start(self):
         self.mp_face = mp.solutions.face_mesh.FaceMesh(
-            max_num_faces=1, static_image_mode=True, refine_landmarks=True
+            max_num_faces=1,
+            static_image_mode=True,
+            refine_landmarks=True
         )
 
     def update(self):
         # Get latest frame (non-blocking)
-        image = signals.lens_output_queue.get()["processed_img"]
+        lens_out = signals.lens_output_queue.get_last()
+
+        if lens_out is None:
+            return
+
+        image = lens_out.clean_img
 
         with signals.gpu_yolo_lock:
             result = self.mp_face.process(image)
@@ -36,16 +46,22 @@ class FaceExtractorTask(Task):
 
             # Put face array into the queue
             signals.face_extractor_queue.put(
-                {
-                    "face_points_matrix": face_array,
-                    "face_points_flattened": face_array.flatten(),
-                    "raw_land_marks": face_landmarks
-                })
+                FaceExtractorTaskOutput(
+                    img=image,
+                    face_found=True,
+                    face_points_matrix=face_array,
+                    face_points_flattened=face_array.flatten(),
+                    raw_land_marks=face_landmarks.landmark
+                )
+            )
         else:
             # No face found → put None
             signals.face_extractor_queue.put(
-                {
-                    "face_points_matrix": None,
-                    "face_points_flattened": None,
-                    "raw_land_marks": None
-                })
+                FaceExtractorTaskOutput(
+                    img=image,
+                    face_found=False,
+                    face_points_matrix=None,
+                    face_points_flattened=None,
+                    raw_land_marks=None,
+                )
+            )

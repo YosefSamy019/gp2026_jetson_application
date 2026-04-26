@@ -1,38 +1,52 @@
+from network.models.models import ViolationDataModel, MCUNetworkDataModel
 from scheduler.scheduler import register_queue, create_lock
 from scheduler.items_queue import ItemsQueue
+from app.pipe_line.models.models import *
 
-camera_output_queue: ItemsQueue = register_queue(ItemsQueue(name='camera_output_queue', max_n_items=1))
+camera_output_queue: ItemsQueue[CameraTaskOutput] = register_queue(
+    ItemsQueue[CameraTaskOutput](name='camera_output_queue', max_n_items=1))
 
-lens_output_queue: ItemsQueue = register_queue(ItemsQueue(name='lens_output_queue', max_n_items=1))
+lens_output_queue: ItemsQueue[LensTaskOutput] = register_queue(
+    ItemsQueue[LensTaskOutput](name='lens_output_queue', max_n_items=1))
 
-object_detector_yolo_queue: ItemsQueue = register_queue(ItemsQueue(name='object_detector_yolo_queue', max_n_items=1))
+object_detector_yolo_queue: ItemsQueue[ObjectsDetectorTaskOutput] = register_queue(
+    ItemsQueue[ObjectsDetectorTaskOutput](name='object_detector_yolo_queue', max_n_items=1))
 
-seatbelt_detector_yolo_queue: ItemsQueue = register_queue(
-    ItemsQueue(name='seatbelt_detector_yolo_queue', max_n_items=1))
+seatbelt_detector_yolo_queue: ItemsQueue[SeatbeltDetectorTaskOutput] = register_queue(
+    ItemsQueue[SeatbeltDetectorTaskOutput](name='seatbelt_detector_yolo_queue', max_n_items=1))
 
-face_extractor_queue: ItemsQueue = register_queue(ItemsQueue(name='face_extractor_queue', max_n_items=1))
+face_extractor_queue: ItemsQueue[FaceExtractorTaskOutput] = register_queue(
+    ItemsQueue[FaceExtractorTaskOutput](name='face_extractor_queue', max_n_items=1))
 
-driver_tracker_queue: ItemsQueue = register_queue(ItemsQueue(name='driver_tracker_queue', max_n_items=1))
+driver_tracker_queue: ItemsQueue[DriverTrackerTaskOutput] = register_queue(
+    ItemsQueue[DriverTrackerTaskOutput](name='driver_tracker_queue', max_n_items=1))
 
-driver_detector_queue: ItemsQueue = register_queue(ItemsQueue(name='driver_detector_queue', max_n_items=1))
+driver_detector_queue: ItemsQueue[DriverDetectorTaskOutput] = register_queue(
+    ItemsQueue[DriverDetectorTaskOutput](name='driver_detector_queue', max_n_items=1))
 
-face_clipper_recognizer_queue: ItemsQueue = register_queue(
-    ItemsQueue(name='face_clipper_recognizer_queue', max_n_items=1))
+face_clipper_recognizer_queue: ItemsQueue[FaceClipperRecognizerTaskOutput] = register_queue(
+    ItemsQueue[FaceClipperRecognizerTaskOutput](name='face_clipper_recognizer_queue', max_n_items=1))
 
-eye_open_close_queue: ItemsQueue = register_queue(ItemsQueue(name='eye_open_close_queue', max_n_items=1))
+eye_open_close_queue: ItemsQueue[EyeOpenCloseTaskOutput] = register_queue(
+    ItemsQueue[EyeOpenCloseTaskOutput](name='eye_open_close_queue', max_n_items=1))
 
-yawing_queue: ItemsQueue = register_queue(ItemsQueue(name='yawing_queue', max_n_items=1))
+yawing_queue: ItemsQueue[YawingTaskOutput] = register_queue(
+    ItemsQueue[YawingTaskOutput](name='yawing_queue', max_n_items=1))
 
-head_pose_queue: ItemsQueue = register_queue(ItemsQueue(name='head_pose_queue', max_n_items=1))
+head_pose_queue: ItemsQueue[HeadPoseTaskOutput] = register_queue(
+    ItemsQueue[HeadPoseTaskOutput](name='head_pose_queue', max_n_items=1))
 
-face_recognition_queue: ItemsQueue = register_queue(ItemsQueue(name='face_recognition_queue', max_n_items=1))
+face_recognition_queue: ItemsQueue[FaceClipperRecognizerTaskOutput] = register_queue(
+    ItemsQueue[FaceClipperRecognizerTaskOutput](name='face_recognition_queue', max_n_items=1))
 
-trip_status_queue: ItemsQueue = register_queue(ItemsQueue(name='trip_status_queue', max_n_items=1))
+trip_status_queue: ItemsQueue[int] = register_queue(ItemsQueue[int](name='trip_status_queue', max_n_items=1))
 
-speaker_queue: ItemsQueue = register_queue(ItemsQueue(name='speaker_queue', max_n_items=None))
+speaker_queue: ItemsQueue[str] = register_queue(ItemsQueue[str](name='speaker_queue', max_n_items=None))
 
-violations_queue: ItemsQueue = register_queue(ItemsQueue(name='violations_queue', max_n_items=None))
+violations_queue: ItemsQueue[ViolationDataModel] = register_queue(
+    ItemsQueue[ViolationDataModel](name='violations_queue', max_n_items=None))
 
-mcu_network_queue: ItemsQueue = register_queue(ItemsQueue(name='mcu_network_queue', max_n_items=None))
+mcu_network_queue: ItemsQueue[MCUNetworkDataModel] = register_queue(
+    ItemsQueue[MCUNetworkDataModel](name='mcu_network_queue', max_n_items=None))
 
 gpu_yolo_lock = create_lock('gpu_yolo_lock')

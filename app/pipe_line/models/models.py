@@ -1,0 +1,92 @@
+from dataclasses import dataclass
+from typing import List, Tuple, Optional
+
+import numpy as np
+
+
+@dataclass(frozen=True)
+class CameraTaskOutput:
+    raw_img: np.ndarray
+
+
+@dataclass(frozen=True)
+class LensTaskOutput:
+    clean_img: np.ndarray
+
+
+@dataclass(frozen=True)
+class FaceExtractorTaskOutput:
+    img: np.ndarray
+    face_found: bool
+    face_points_matrix: Optional[np.ndarray]
+    face_points_flattened: Optional[np.ndarray]
+    raw_land_marks: Optional[np.ndarray]
+
+
+@dataclass(frozen=True)
+class DriverDetectorTaskOutput:
+    img: np.ndarray
+    face_found: bool
+    face_points_matrix: Optional[np.ndarray]
+    face_points_flattened: Optional[np.ndarray]
+    raw_land_marks: Optional[np.ndarray]
+
+
+@dataclass(frozen=True)
+class EyeOpenCloseTaskOutput:
+    ear_avg: float
+    is_eye_open: bool
+    is_eye_close: bool
+
+
+@dataclass(frozen=True)
+class YawingTaskOutput:
+    is_yawing: bool
+    is_yawing_probability: float
+
+
+@dataclass(frozen=True)
+class HeadPoseTaskOutput:
+    is_front: bool
+    is_right: bool
+    is_left: bool
+    probability: float
+
+
+@dataclass(frozen=True)
+class DriverTrackerTaskOutput:
+    driver_has_changed: bool
+
+
+@dataclass(frozen=True)
+class DriverTrackerTaskOutput:
+    driver_has_changed: bool
+
+
+@dataclass(frozen=True)
+class FaceClipperRecognizerTaskOutput:
+    driver_id: int
+    driver_name: str
+    driver_age: int
+    driver_image_url: str
+
+
+@dataclass(frozen=True)
+class SeatbeltDetectorTaskOutput:
+    is_seatbelt_on: Optional[bool]
+    is_seatbelt_off: Optional[bool]
+    probability: Optional[float]
+    is_no_detection: bool
+    object_xyxy: Optional[Tuple[float, float, float, float]]
+
+
+@dataclass(frozen=True)
+class _SingleObjectsDetectorTaskOutput:
+    object_name: str
+    object_xyxy: Tuple[float, float, float, float]
+    object_probability: float
+
+
+@dataclass(frozen=True)
+class ObjectsDetectorTaskOutput:
+    objects_list: List[_SingleObjectsDetectorTaskOutput]
