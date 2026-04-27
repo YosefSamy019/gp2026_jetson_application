@@ -1,194 +1,96 @@
-import cv2
-from PIL import Image, ImageTk
 import customtkinter as ctk
-
-import mcal.cache as cache
-
-import app.upper_logic as up
-import app.view.camera_view as camera_view
-import app.view.logs_view as logs_view
-import app.view.scheduler_view as scheduler_view
-import app.view.network_tracer_view as network_tracer_view
-import app.view.show_cache_view as cache_view
-import app.view.setting_view as setting_view
-import app.view.driver_view as driver_view
-from mcal import logs
-import constants.assets_manager as assets_manager
-
-main_frame_hook: ctk.CTkScrollableFrame = None
-root: ctk.CTk = None
-
-display_cam_frame: ctk.BooleanVar = None
+from app.pages.cache_page import CachePage
+from app.pages.camera_page import CameraPage
+from app.pages.driver_page import DriverPage
+from app.pages.intro_page import IntroPage
+from app.pages.logs_page import LogsPage
+from app.pages.network_page import NetworkPage
+from app.pages.scheduler_page import SchedulerPage
+from app.pages.settings_page import SettingsPage
+from app.pipe_line.pipeline import pipeline_init
+from app.ui_constants import PagesKeys
+import app.ui_constants as ui_constants
+from mcal import cache
 
 
-def play_intro(root, callback):
-    splash = ctk.CTkFrame(root)
-    splash.place(relx=0, rely=0, relwidth=1, relheight=1)
-    splash.lift()
+class MainApp(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self._pipeline_status = False
 
-    video_label = ctk.CTkLabel(splash, text="")
-    video_label.pack(expand=True, fill="both")
+        self.title('Smart Driver Monitor')
+        self.geometry('600x500')
 
-    cap = cv2.VideoCapture(assets_manager.INTRO_VIDEO_PATH)
+        self.load_theme()
 
-    def update_frame():
-        ret, frame = cap.read()
-        if not ret:
-            cap.release()
-            splash.destroy()
-            callback()
-            return
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
 
-        w = root.winfo_width()
-        h = root.winfo_height()
+        self.container = ctk.CTkFrame(self)
+        self.container.grid(row=0, column=0, sticky="nsew")
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
 
-        frame = cv2.resize(frame, (w, h))
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        self.pages = self._create_pages()
+        self.current_page = self.pages[PagesKeys.IntroPage]
 
-        img = ImageTk.PhotoImage(Image.fromarray(frame))
-        video_label.configure(image=img)
-        video_label.image = img
+        for page_key, page in self.pages.items():
+            page.grid(row=0, column=0, sticky="nsew")
 
-        root.after(30, update_frame)
+        self.navigate_to(PagesKeys.IntroPage)
 
-    update_frame()
+        self._engine()
 
-
-def app_run():
-    global root, main_frame_hook, main_frame_hook, display_cam_frame
-
-    root = ctk.CTk()
-    root.geometry('600x500')
-    root.title('Smart Driver Monitor')
-
-    def start_main_app():
-        global root, main_frame_hook, main_frame_hook, display_cam_frame
-
-        root.grid_columnconfigure(0, weight=9)
-        root.grid_columnconfigure(1, weight=1)
-        root.grid_rowconfigure(0, weight=1)
-
-        display_cam_frame = ctk.BooleanVar()
-
-        if bool(cache.get_value('sw mode', 0, float)):
+    def load_theme(self):
+        if cache.get_value('sw mode', 0, int) == 0:
             ctk.set_appearance_mode('light')
         else:
             ctk.set_appearance_mode('dark')
 
         ctk.set_default_color_theme('green')
+        ctk.set_widget_scaling(cache.get_value('ui scale', 1.0, float))
 
-        # ctk.set_window_scaling(cache.get_value('ui scale', 0, float))
-        ctk.set_widget_scaling(cache.get_value('ui scale', 1, float))
+    def _create_pages(self):
+        return {
+            PagesKeys.IntroPage: IntroPage(controller=self, parent=self.container,
+                                           loop_periodicity=ui_constants.UI_INTRO_DELAY),
 
-        side_bar_frame = ctk.CTkScrollableFrame(
-            root,
-            width=160,
-            corner_radius=12
-        )
+            PagesKeys.CameraPage: CameraPage(controller=self, parent=self.container,
+                                             loop_periodicity=ui_constants.UI_CAMERA_DELAY),
 
-        main_frame = ctk.CTkScrollableFrame(
-            root,
-            corner_radius=12
-        )
+            PagesKeys.CachePage: CachePage(controller=self, parent=self.container,
+                                           loop_periodicity=ui_constants.UI_CACHE_DELAY),
 
-        main_frame_hook = main_frame
+            PagesKeys.DriverPage: DriverPage(controller=self, parent=self.container,
+                                             loop_periodicity=ui_constants.UI_DRIVER_DELAY),
 
-        main_frame.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
-        side_bar_frame.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
+            PagesKeys.LogsPage: LogsPage(controller=self, parent=self.container,
+                                         loop_periodicity=ui_constants.UI_LOGS_DELAY),
 
-        # Button 1
-        sidebar_title = ctk.CTkLabel(
-            side_bar_frame,
-            text="Menu",
-            font=ctk.CTkFont(size=16, weight="bold")
-        )
-        cam_btn = ctk.CTkButton(side_bar_frame, text='Show Camera', command=lambda: page_transition(camera_view))
-        driver_btn = ctk.CTkButton(side_bar_frame, text='Driver', command=lambda: page_transition(driver_view))
-        logs_btn = ctk.CTkButton(side_bar_frame, text='Show Logs', command=lambda: page_transition(logs_view))
-        scheduler_btn = ctk.CTkButton(side_bar_frame, text='Open Scheduler',
-                                      command=lambda: page_transition(scheduler_view))
-        network_history_btn = ctk.CTkButton(side_bar_frame, text='Trace Network',
-                                            command=lambda: page_transition(network_tracer_view))
-        cache_btn = ctk.CTkButton(side_bar_frame, text='Show Cache', command=lambda: page_transition(cache_view))
-        setting_btn = ctk.CTkButton(side_bar_frame, text='Setting', command=lambda: page_transition(setting_view))
+            PagesKeys.NetworkPage: NetworkPage(controller=self, parent=self.container,
+                                               loop_periodicity=ui_constants.UI_NETWORK_DELAY),
 
-        sidebar_title.pack(padx=10, pady=(15, 10))
-        cam_btn.pack(padx=10, pady=(5, 5), fill='x')
-        driver_btn.pack(padx=10, pady=(5, 5), fill='x')
-        logs_btn.pack(padx=10, pady=5, fill='x')
-        scheduler_btn.pack(padx=10, pady=5, fill='x')
-        network_history_btn.pack(padx=10, pady=5, fill='x')
-        cache_btn.pack(padx=10, pady=5, fill='x')
-        setting_btn.pack(padx=10, pady=5, fill='x')
+            PagesKeys.SchedulerPage: SchedulerPage(controller=self, parent=self.container,
+                                                   loop_periodicity=ui_constants.UI_SCHEDULER_DELAY),
 
-        # as initial
-        up.upper_awake(root)
+            PagesKeys.SettingsPage: SettingsPage(controller=self, parent=self.container,
+                                                 loop_periodicity=ui_constants.UI_SETTINGS_DELAY),
+        }
 
-        cache_view.init()
-        network_tracer_view.init()
-        scheduler_view.init()
-        logs_view.init()
-        driver_view.init()
+    def navigate_to(self, page: PagesKeys):
+        self.current_page = self.pages[page]
+        self.pages[page].tkraise()
 
-        page_transition(new_page=camera_view)
+    def _engine(self):
+        self.current_page.loop()
+        # Convert Sec to m-Sec
+        self.after(int(1000 * self.current_page.loop_periodicity), lambda: self._engine())
 
-    play_intro(root, start_main_app)
-
-    root.mainloop()
+    def start_pipeline(self):
+        if self._pipeline_status:
+            return
+        else:
+            self._pipeline_status = True
+            pipeline_init()
 
 
-def page_transition(new_page):
-    if new_page is camera_view:
-        display_cam_frame.set(True)
-    else:
-        display_cam_frame.set(False)
-
-    for widget in main_frame_hook.winfo_children():
-        widget.destroy()
-
-    if new_page is camera_view:
-        camera_view.show_cam_window(
-            root=root,
-            main_fram_hook=main_frame_hook,
-            display_cam_frame=display_cam_frame
-        )
-
-    elif new_page is driver_view:
-        driver_view.show_driver_window(
-            root=root,
-            main_frame_hook=main_frame_hook,
-        )
-
-    elif new_page is logs_view:
-        logs_view.show_logs_window(
-            root=root,
-            main_fram_hook=main_frame_hook,
-        )
-
-    elif new_page is scheduler_view:
-        scheduler_view.show_scheduler_window(
-            root=root,
-            main_frame_hook=main_frame_hook,
-        )
-
-    elif new_page is network_tracer_view:
-        network_tracer_view.show_network_history_window(
-            root=root,
-            main_frame_hook=main_frame_hook,
-        )
-
-    elif new_page is cache_view:
-        cache_view.show_cache_window(
-            root=root,
-            main_frame_hook=main_frame_hook,
-        )
-
-    elif new_page is setting_view:
-        setting_view.show_settings_window(
-            root=root,
-            main_fram_hook=main_frame_hook,
-
-        )
-
-    else:
-        logs.add_log("Transition unhandled {}".format(new_page), logs.LogLevel.ERROR)

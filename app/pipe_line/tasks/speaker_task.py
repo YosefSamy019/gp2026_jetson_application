@@ -5,7 +5,7 @@ import app.pipe_line.signals as signals
 from hal import speaker as speaker
 import time
 import json
-import app.look_up_keys as look_up_keys
+from constants import look_up_keys
 import app.pipe_line.timing as timing
 import constants.assets_manager as assets_manager
 from scheduler.task import Task

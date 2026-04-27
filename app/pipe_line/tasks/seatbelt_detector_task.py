@@ -1,6 +1,7 @@
 import datetime
 
 from app.pipe_line.models.models import SeatbeltDetectorTaskOutput
+from constants import look_up_keys
 from mcal import logs
 import app.pipe_line.signals as signals
 
@@ -8,7 +9,6 @@ import time
 import models.seatbelt as seatbelt
 import app.pipe_line.timing as timing
 
-import app.look_up_keys as look_up_keys
 from network.models.models import ViolationDataModel
 from scheduler.task import Task
 

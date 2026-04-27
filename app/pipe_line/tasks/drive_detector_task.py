@@ -1,8 +1,8 @@
 from app.pipe_line.models.models import DriverDetectorTaskOutput
+from constants import look_up_keys
 from mcal import logs
 import app.pipe_line.signals as signals
 import time
-import app.look_up_keys as look_up_keys
 import app.pipe_line.timing as timing
 from scheduler.task import Task
 

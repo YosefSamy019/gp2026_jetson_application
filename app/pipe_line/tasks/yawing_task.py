@@ -4,7 +4,7 @@ import app.pipe_line.signals as signals
 import models.yawing as yawing
 import time
 import app.pipe_line.timing as timing
-import app.look_up_keys as look_up_keys
+from constants import look_up_keys
 from scheduler.task import Task
 
 

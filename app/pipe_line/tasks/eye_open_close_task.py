@@ -1,11 +1,11 @@
 from app.pipe_line.models.models import EyeOpenCloseTaskOutput
+from constants import look_up_keys
 from mcal import logs
 from scheduler.scheduler import *
 import app.pipe_line.signals as signals
 import models.eye as eye
 import time
 import app.pipe_line.timing as timing
-import app.look_up_keys as look_up_keys
 
 
 class EyeOpenCloseTask(Task):

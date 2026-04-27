@@ -5,7 +5,7 @@ import app.pipe_line.signals as signals
 import models.head_pose as head_pose
 import time
 import app.pipe_line.timing as timing
-import app.look_up_keys as look_up_keys
+from constants import look_up_keys
 
 
 class HeadPoseTask(Task):

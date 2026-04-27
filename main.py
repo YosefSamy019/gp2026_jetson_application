@@ -7,8 +7,8 @@ import network.mcu_network_handler as mcu_network_handler
 import network.cloud_network_handler as cloud_network_handler
 import network.violation_network_handler as violation_network_handler
 import models.models_init as models_init
-import app.app as app
 from hal import speaker as speaker
+from app.app import MainApp
 
 
 def main():
@@ -30,7 +30,7 @@ def main():
     logs.add_log("Running App...", logs.LogLevel.INFO)
 
     # Run app in main threads
-    app.app_run()
+    MainApp().mainloop()
 
 
 if __name__ == "__main__":
