@@ -29,3 +29,4 @@
 - TODO add STM32 network code -> Yosef
 - Ensure OpenCV GPU is on
 - Make the speaker delete old requests in case of it stayed too long in queue, better that too late audio
+- Speaker says HI to the user when he is detected via face recognition
