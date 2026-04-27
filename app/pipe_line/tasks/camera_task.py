@@ -11,8 +11,8 @@ from scheduler.task import Task
 
 class CameraTask(Task):
     PATHS_DICT = {
-        # "YOSEF-SA": r"D:\GP\dataset\videos\distraction\gA_4_s1_2019-03-13T10;36;15+01;00_rgb_face.mp4",
-        "YOSEF-SA": 0,
+        "YOSEF-SA": r"D:\GP\dataset\videos\distraction\gA_4_s1_2019-03-13T10;36;15+01;00_rgb_face.mp4",
+        # "YOSEF-SA": 0,
         "DESKTOP-17FURUT": 0,
     }
 
