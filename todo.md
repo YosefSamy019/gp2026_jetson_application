@@ -16,6 +16,10 @@
 - Trip State Queue, send number of trip -> Yahia
 - rebuild yolo with NMS=False, Dynamic=False
 - Move Yosef's Yolo workspace to KAGGLE
+- Seatbelt: Detect 2 boxes at same person 
+- Refactor screen navigation UI
+- Refactor Scheduler and Add Periodicity auto check
+- Enhance tasks to ensure match in periodicity
 
 # Ongoing
 
@@ -23,8 +27,5 @@
 
 - TODO BACKEND API implement and face recognition
 - TODO add STM32 network code -> Yosef
-- Seatbelt: Detect 2 boxes at same person 
-- Refactor screen navigation UI
 - Ensure OpenCV GPU is on
-- Refactor Scheduler and Add Periodicity auto check
-- Enhance tasks to ensure match in periodicity
+- Make the speaker delete old requests in case of it stayed too long in queue, better that too late audio
