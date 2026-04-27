@@ -56,7 +56,7 @@ def get_report():
 
     return_dict['queues'] = [
         f"Queue: {x.get_name()}\n"
-        f"\t-content_len={len(x)}"
+        f"\t-length={len(x)}#{x.max_n_items}"
         for x in _queue_list
     ]
 

@@ -6,8 +6,7 @@ import app.pipe_line.signals as signals
 from app.ui_constants import RGBColor
 
 
-class PanelComponent(OverlayComponent):
-
+class UpperLeftComponent(OverlayComponent):
     def process_frame(self, frame: np.ndarray, **params) -> np.ndarray:
         font = cv2.FONT_HERSHEY_SIMPLEX
         font_scale = 0.6
@@ -20,7 +19,9 @@ class PanelComponent(OverlayComponent):
 
         yawning_task_out = signals.yawing_queue.get_last()
         if yawning_task_out is not None:
-            if yawning_task_out.is_yawing:
+            if not yawning_task_out.is_yawning_detected:
+                pass
+            elif yawning_task_out.is_yawing:
                 texts_to_draw.append(f"Yawning: Sleepy, Prob: {yawning_task_out.is_yawing_probability:0.2f}")
                 colors.append(RGBColor.RED.value)
             else:
@@ -29,7 +30,9 @@ class PanelComponent(OverlayComponent):
 
         eye_task_out = signals.eye_open_close_queue.get_last()
         if eye_task_out is not None:
-            if eye_task_out.is_eye_open:
+            if not eye_task_out.is_eye_detected:
+                pass
+            elif eye_task_out.is_eye_open:
                 texts_to_draw.append(f"Eye: Open,  Ear-AVG: {eye_task_out.ear_avg:0.2f}")
                 colors.append(RGBColor.DARK_GREEN.value)
             else:
@@ -38,25 +41,38 @@ class PanelComponent(OverlayComponent):
 
         head_pose_task_out = signals.head_pose_queue.get_last()
         if head_pose_task_out is not None:
-            if head_pose_task_out.is_front:
+            if not head_pose_task_out.is_head_detected:
+                pass
+            elif head_pose_task_out.is_front:
                 texts_to_draw.append(f"Head: Front,  Prob: {head_pose_task_out.probability:0.2f}")
                 colors.append(RGBColor.DARK_GREEN.value)
-            if head_pose_task_out.is_left:
+            elif head_pose_task_out.is_left:
                 texts_to_draw.append(f"Head: Left,   Prob: {head_pose_task_out.probability:0.2f}")
                 colors.append(RGBColor.RED.value)
-            if head_pose_task_out.is_right:
+            elif head_pose_task_out.is_right:
                 texts_to_draw.append(f"Head: Right,  Prob: {head_pose_task_out.probability:0.2f}")
                 colors.append(RGBColor.RED.value)
 
-        face_clipper_recognizer_task_out = signals.face_clipper_recognizer_queue.get_last()
-        if face_clipper_recognizer_task_out is not None:
-            if face_clipper_recognizer_task_out.driver_id is not None:
-                texts_to_draw.append(f"Driver-ID: {face_clipper_recognizer_task_out.driver_id}")
-                colors.append(RGBColor.DARK_GREEN.value)
-            if face_clipper_recognizer_task_out.driver_id is None:
-                texts_to_draw.append(f"Driver-ID: NOT-DETECTED")
+        seatbelt_out = signals.seatbelt_detector_yolo_queue.get_last()
+        if seatbelt_out is not None:
+            if seatbelt_out.is_no_detection:
+                texts_to_draw.append(f"Seatbelt: NO-DETECTED")
+                colors.append(RGBColor.DARK_RED.value)
+            elif seatbelt_out.is_seatbelt_off:
+                texts_to_draw.append(f"Seatbelt: OFF")
                 colors.append(RGBColor.RED.value)
+            elif seatbelt_out.is_seatbelt_on:
+                texts_to_draw.append(f"Seatbelt: ON")
+                colors.append(RGBColor.GREEN.value)
 
+        # Draw Panel
+        panel_w = 300
+        panel_h = 40 * len(texts_to_draw)
+        alpha = 0.5
+
+        frame[:panel_h, :panel_w] = frame[:panel_h, :panel_w] * (1 - alpha) + alpha * np.array(RGBColor.GRAY_DARK.value)
+
+        # Put texts
         for i, x in enumerate(texts_to_draw):
             cv2.putText(frame,
                         x,

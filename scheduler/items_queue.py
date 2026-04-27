@@ -10,6 +10,7 @@ class ItemsQueue(Generic[T]):
         self._name = name
         self._lock = threading.Lock()
         self._items_queue: Deque[T] = deque(maxlen=max_n_items)
+        self.max_n_items = max_n_items
 
     def get_name(self) -> str:
         return self._name

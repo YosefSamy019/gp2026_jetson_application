@@ -18,6 +18,8 @@ class FaceClipperRecognizerTask(Task):
     def __init__(self, name: str, periodicity: float):
         super().__init__(name, periodicity)
 
+        self.driver_last_candidate_id = None
+
         self.counter = 0
         self.driver_id = None
         self.pad_ratio = 0.35
@@ -25,8 +27,12 @@ class FaceClipperRecognizerTask(Task):
     def update(self):
         driver_tracker_out = signals.driver_tracker_queue.get_last()
 
-        if driver_tracker_out is None or driver_tracker_out.driver_has_changed:
+        driver_has_changed = driver_tracker_out is None or driver_tracker_out.driver_candidate_id != self.driver_last_candidate_id
+
+        if driver_has_changed:
             self.driver_id = None
+            self.driver_last_candidate_id = driver_tracker_out.driver_candidate_id
+
             signals.face_clipper_recognizer_queue.put(
                 FaceClipperRecognizerTaskOutput(
                     driver_id=None,
@@ -96,8 +102,8 @@ class FaceClipperRecognizerTask(Task):
                 signals.face_clipper_recognizer_queue.put(
                     FaceClipperRecognizerTaskOutput(
                         driver_id=self.driver_id,
-                        driver_name='ABC',
-                        driver_age=34,
+                        driver_name='Yosef Samy',
+                        driver_age=23,
                         driver_image_url=image_url,
                     )
                 )

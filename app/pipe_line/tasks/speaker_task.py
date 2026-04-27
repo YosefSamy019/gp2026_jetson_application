@@ -1,12 +1,9 @@
 import random
 
-from mcal import logs
 import app.pipe_line.signals as signals
 from hal import speaker as speaker
-import time
 import json
 from constants import look_up_keys
-import app.pipe_line.timing as timing
 import constants.assets_manager as assets_manager
 from scheduler.task import Task
 
@@ -37,4 +34,16 @@ class SpeakerDetectorTask(Task):
 
             if len(all_possible_responses) > 0:
                 random_response = random.choice(all_possible_responses)
-                speaker.speaker(str(random_response))
+                self._play(random_response)
+
+    def _play(self, text):
+        text = str(text)
+
+        # Replace Name
+        face_recognizer_out = signals.face_clipper_recognizer_queue.get_last()
+        if face_recognizer_out is not None and face_recognizer_out.driver_name is not None:
+            text = text.replace('#NAME', face_recognizer_out.driver_name)
+        else:
+            text = text.replace('#NAME', '')
+
+        speaker.speaker(text)

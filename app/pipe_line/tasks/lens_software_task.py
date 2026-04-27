@@ -3,8 +3,6 @@ from mcal import logs
 import app.pipe_line.signals as signals
 import time
 import cv2
-import app.pipe_line.timing as timing
-import scheduler.scheduler as scheduler
 from scheduler.task import Task
 
 

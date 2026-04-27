@@ -21,6 +21,7 @@ class FaceExtractorTaskOutput:
     face_points_matrix: Optional[np.ndarray]
     face_points_flattened: Optional[np.ndarray]
     raw_land_marks: Optional[np.ndarray]
+    face_rect_xyxy: Optional[Tuple[int, int, int, int]]
 
 
 @dataclass(frozen=True)
@@ -34,23 +35,26 @@ class DriverDetectorTaskOutput:
 
 @dataclass(frozen=True)
 class EyeOpenCloseTaskOutput:
-    ear_avg: float
-    is_eye_open: bool
-    is_eye_close: bool
+    is_eye_detected: bool
+    ear_avg: Optional[float]
+    is_eye_open: Optional[bool]
+    is_eye_close: Optional[bool]
 
 
 @dataclass(frozen=True)
 class YawingTaskOutput:
-    is_yawing: bool
-    is_yawing_probability: float
+    is_yawning_detected: bool
+    is_yawing: Optional[bool]
+    is_yawing_probability: Optional[float]
 
 
 @dataclass(frozen=True)
 class HeadPoseTaskOutput:
-    is_front: bool
-    is_right: bool
-    is_left: bool
-    probability: float
+    is_head_detected: bool
+    is_front: Optional[bool]
+    is_right: Optional[bool]
+    is_left: Optional[bool]
+    probability: Optional[float]
 
 
 @dataclass(frozen=True)
@@ -60,7 +64,7 @@ class DriverTrackerTaskOutput:
 
 @dataclass(frozen=True)
 class DriverTrackerTaskOutput:
-    driver_has_changed: bool
+    driver_candidate_id: int
 
 
 @dataclass(frozen=True)

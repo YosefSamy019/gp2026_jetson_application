@@ -28,9 +28,10 @@ class SnackBarComponent(OverlayComponent):
 
     def process_frame(self, frame: np.ndarray, **params) -> np.ndarray:
         h, w, _ = frame.shape
+        target_w, _ = params['window_size']
 
         y = h - 10
-        self._cur_x += self._delta_x
+        self._cur_x += self._delta_x * max(1, target_w // 400)
 
         if self._cur_x > w:
             self._cur_display_text = random.choice(self._all_display_texts)

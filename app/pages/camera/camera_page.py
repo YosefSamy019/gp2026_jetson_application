@@ -6,8 +6,10 @@ import customtkinter as ctk
 import app.pipe_line.signals as signals
 from app.pages.base.stacked_nav_base_page import StackedNavigationBasePage
 from app.pages.camera.components.cam_page_face_mesh import FaceMeshComponent
+from app.pages.camera.components.cam_page_lower_left_panel import LowerLeftComponent
 from app.pages.camera.components.cam_page_objects_detects import ObjectDetectComponent
-from app.pages.camera.components.cam_page_panel import PanelComponent
+from app.pages.camera.components.cam_page_red_alert import RedAlertComponent
+from app.pages.camera.components.cam_page_upper_left_panel import UpperLeftComponent
 from app.pages.camera.components.cam_page_resize import ResizeComponent
 from app.pages.camera.components.cam_page_seatbelt_detects import SeatbeltDetectComponent
 from app.pages.camera.components.cam_page_snack_bar import SnackBarComponent
@@ -30,11 +32,13 @@ class CameraPage(StackedNavigationBasePage):
         self.image_label.grid(row=0, column=0, sticky="nsew")
 
         self.transformations = [
+            RedAlertComponent(),
             SeatbeltDetectComponent(),
             ObjectDetectComponent(),
             FaceMeshComponent(),
             ResizeComponent(),
-            PanelComponent(),
+            UpperLeftComponent(),
+            LowerLeftComponent(),
             SnackBarComponent(),
         ]
 

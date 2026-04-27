@@ -1,8 +1,8 @@
 {
   "GREETING": [
-    "Hello",
-    "Good morning",
-    "Welcome"
+    "Hello #NAME",
+    "Good morning #NAME",
+    "Welcome #NAME"
   ],
   "DRIVER_NOT_DETECTED": [
     "Driver not detected, please sit properly",
@@ -15,26 +15,26 @@
     "This vehicle is registered to another driver"
   ],
   "DRIVER_DROWSY": [
-    "You appear to be drowsy, please take a break",
-    "You look tired, consider resting",
-    "Drowsiness detected, stay alert"
+    "#NAME, You appear to be drowsy, please take a break",
+    "#NAME, You look tired, consider resting",
+    "#NAME, Drowsiness detected, stay alert"
   ],
   "DRIVER_DISTRACTED": [
-    "Please focus on the road",
-    "You are distracted, keep your eyes on the road",
-    "Attention required, do not look away"
+    "Please #NAME, focus on the road",
+    "#NAME, You are distracted, keep your eyes on the road",
+    "#NAME, Attention required, do not look away"
   ],
   "DRIVER_USING_PHONE": [
-    "Please stop using your phone",
-    "Phone usage detected, focus on driving",
-    "Do not text while driving"
+    "#NAME, Please stop using your phone",
+    "#NAME, Phone usage detected, focus on driving",
+    "#NAME, Do not text while driving"
   ],
   "DRIVER_SMOKING": [
-    "Smoking detected, please stop smoking",
-    "Please avoid smoking while driving"
+    "Smoking detected, please #NAME, stop smoking",
+    "#NAME, Please avoid smoking while driving"
   ],
   "WEAPON_DETECTED": [
-    "Warning: weapon detected",
+    "Warning #NAME: weapon detected",
     "Dangerous object detected, drive with caution"
   ],
   "HIGH_TEMPERATURE": [
@@ -43,13 +43,13 @@
     "Overheating detected, take action"
   ],
   "DRIVER_SEATBELT": [
-    "Please fasten your seat belt",
-    "Seat belt not detected, please fasten it",
-    "For your safety, fasten your seat belt"
+    "#NAME, Please fasten your seat belt",
+    "#NAME, Seat belt not detected, please fasten it",
+    "#NAME, For your safety, fasten your seat belt"
   ],
   "DRIVER_FOOD": [
-    "Please avoid eating while driving",
-    "Eating detected, keep your hands on the wheel",
-    "For your safety, do not eat while driving"
+    "#NAME, Please avoid eating while driving",
+    "#NAME, Eating detected, keep your hands on the wheel",
+    "#NAME, For your safety, do not eat while driving"
   ]
 }

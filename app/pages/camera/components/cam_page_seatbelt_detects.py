@@ -28,7 +28,7 @@ class SeatbeltDetectComponent(OverlayComponent):
         cv2.rectangle(frame, (x1, y1), (x2, y2), seatbelt_color, 2)
 
         cv2.putText(frame,
-                    f"{temp_txt}({seatbelt_task_out.probability})",
+                    f"{temp_txt}({seatbelt_task_out.probability:0.2f})",
                     (x1, max(20, y1 - 10)),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.5,

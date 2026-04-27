@@ -1,11 +1,9 @@
 from app.pipe_line.models.models import EyeOpenCloseTaskOutput
 from constants import look_up_keys
-from mcal import logs
 from scheduler.scheduler import *
 import app.pipe_line.signals as signals
 import models.eye as eye
 import time
-import app.pipe_line.timing as timing
 
 
 class EyeOpenCloseTask(Task):
@@ -20,6 +18,14 @@ class EyeOpenCloseTask(Task):
         driver_detector_out = signals.driver_detector_queue.get_last()
 
         if driver_detector_out is None or driver_detector_out.face_points_flattened is None:
+            signals.eye_open_close_queue.put(
+                EyeOpenCloseTaskOutput(
+                    ear_avg=None,
+                    is_eye_open=None,
+                    is_eye_close=None,
+                    is_eye_detected=False
+                )
+            )
             return
 
         temp_vector = driver_detector_out.face_points_flattened
@@ -33,7 +39,8 @@ class EyeOpenCloseTask(Task):
             EyeOpenCloseTaskOutput(
                 ear_avg=ear_avg,
                 is_eye_open=not eye_flag,
-                is_eye_close=eye_flag
+                is_eye_close=eye_flag,
+                is_eye_detected=True
             )
         )
 

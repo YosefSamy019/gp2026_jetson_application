@@ -16,6 +16,13 @@ class YawingTask(Task):
         driver_detector_out = signals.driver_detector_queue.get_last()
 
         if driver_detector_out is None or driver_detector_out.face_points_flattened is None:
+            signals.yawing_queue.put(
+                YawingTaskOutput(
+                    is_yawing=None,
+                    is_yawing_probability=None,
+                    is_yawning_detected=False
+                )
+            )
             return
 
         temp_vector = driver_detector_out.face_points_flattened
@@ -28,7 +35,8 @@ class YawingTask(Task):
         signals.yawing_queue.put(
             YawingTaskOutput(
                 is_yawing=is_yawing,
-                is_yawing_probability=prediction
+                is_yawing_probability=prediction,
+                is_yawning_detected=True
             )
         )
 

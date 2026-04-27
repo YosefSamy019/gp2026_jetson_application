@@ -27,6 +27,7 @@ class FaceExtractorTask(Task):
             return
 
         image = lens_out.clean_img
+        h, w = image.shape[:2]
 
         with signals.gpu_yolo_lock:
             result = self.mp_face.process(image)
@@ -41,6 +42,13 @@ class FaceExtractorTask(Task):
                 [[lm.x, lm.y] for lm in face_landmarks.landmark], dtype=np.float32
             )
 
+            face_rect_xyxy = (
+                int(np.min(face_array[:, 0]) * w),  # X min
+                int(np.min(face_array[:, 1]) * h),  # Y min
+                int(np.max(face_array[:, 0]) * w),  # X max
+                int(np.max(face_array[:, 1]) * h),  # Y max
+            )
+
             # Put face array into the queue
             signals.face_extractor_queue.put(
                 FaceExtractorTaskOutput(
@@ -48,7 +56,8 @@ class FaceExtractorTask(Task):
                     face_found=True,
                     face_points_matrix=face_array,
                     face_points_flattened=face_array.flatten(),
-                    raw_land_marks=face_landmarks
+                    raw_land_marks=face_landmarks,
+                    face_rect_xyxy=face_rect_xyxy
                 )
             )
         else:
@@ -60,5 +69,6 @@ class FaceExtractorTask(Task):
                     face_points_matrix=None,
                     face_points_flattened=None,
                     raw_land_marks=None,
+                    face_rect_xyxy=None,
                 )
             )

@@ -13,7 +13,8 @@ class Task(ABC):
 
         self._engine_last_call_time = None
         self._engine_deltas_calls = deque(
-            maxlen=math.ceil(5 / self.periodicity))  # Store statistics over last 5 seconds
+            maxlen=max(1, math.ceil(5 / self.periodicity))
+        )  # Store statistics over last 5 seconds
 
     @abstractmethod
     def update(self):

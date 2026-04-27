@@ -19,6 +19,16 @@ class HeadPoseTask(Task):
         driver_detector_out = signals.driver_detector_queue.get_last()
 
         if driver_detector_out is None or driver_detector_out.face_points_flattened is None:
+            signals.head_pose_queue.put(
+                HeadPoseTaskOutput(
+                    is_front=None,
+                    is_right=None,
+                    is_left=None,
+                    probability=None,
+                    is_head_detected=False
+                )
+            )
+
             return
 
         temp_vector = driver_detector_out.face_points_flattened
@@ -30,6 +40,7 @@ class HeadPoseTask(Task):
                 is_right=cur_class == 'right',
                 is_left=cur_class == 'left',
                 probability=cur_prop,
+                is_head_detected=True
             )
         )
 
