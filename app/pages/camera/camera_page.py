@@ -10,6 +10,7 @@ from app.pages.camera.components.cam_page_objects_detects import ObjectDetectCom
 from app.pages.camera.components.cam_page_panel import PanelComponent
 from app.pages.camera.components.cam_page_resize import ResizeComponent
 from app.pages.camera.components.cam_page_seatbelt_detects import SeatbeltDetectComponent
+from app.pages.camera.components.cam_page_snack_bar import SnackBarComponent
 
 
 class CameraPage(StackedNavigationBasePage):
@@ -34,6 +35,7 @@ class CameraPage(StackedNavigationBasePage):
             FaceMeshComponent(),
             ResizeComponent(),
             PanelComponent(),
+            SnackBarComponent(),
         ]
 
     def loop(self):

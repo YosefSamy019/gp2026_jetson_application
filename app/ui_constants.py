@@ -27,6 +27,7 @@ class RGBColor(Enum):
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
     GRAY = (128, 128, 128)
+    GRAY_DARK = (64, 64, 64)
 
     ORANGE = (255, 165, 0)
     PURPLE = (128, 0, 128)

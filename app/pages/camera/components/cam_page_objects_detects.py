@@ -14,7 +14,6 @@ class ObjectDetectComponent(OverlayComponent):
         "food": RGBColor.YELLOW.value,
     }
 
-
     def process_frame(self, frame: np.ndarray, **params) -> np.ndarray:
         object_detector_task_out = signals.object_detector_yolo_queue.get_last()
         if object_detector_task_out is None:
