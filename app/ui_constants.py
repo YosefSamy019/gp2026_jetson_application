@@ -47,7 +47,7 @@ class RGBColor(Enum):
 
 
 UI_INTRO_DELAY = 0.001
-UI_CAMERA_DELAY = 0.010  # TODO check jitter delays
+UI_CAMERA_DELAY = 0.050  # TODO check jitter delays
 UI_CACHE_DELAY = 0.100
 UI_DRIVER_DELAY = 0.100
 UI_LOGS_DELAY = 0.100

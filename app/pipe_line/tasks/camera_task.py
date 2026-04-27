@@ -11,8 +11,8 @@ from scheduler.task import Task
 
 class CameraTask(Task):
     PATHS_DICT = {
-        "YOSEF-SA": r"D:\GP\dataset\videos\distraction\gA_4_s1_2019-03-13T10;36;15+01;00_rgb_face.mp4",
-        # "YOSEF-SA": 0,
+        # "YOSEF-SA": r"D:\GP\dataset\videos\distraction\gA_4_s1_2019-03-13T10;36;15+01;00_rgb_face.mp4",
+        "YOSEF-SA": 0,
         "DESKTOP-17FURUT": 0,
     }
 
@@ -21,7 +21,7 @@ class CameraTask(Task):
 
         self.cap = None
         self.computer_name = os.environ.get('COMPUTERNAME')
-        self.camera_path = self.PATHS_DICT.get(self.computer_name)
+        self.camera_path = self.PATHS_DICT.get(self.computer_name, 0)
         logs.add_log(f"Selected Camera Path: {self.camera_path}", logs.LogLevel.INFO)
 
     def update(self):

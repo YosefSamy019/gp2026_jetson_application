@@ -92,5 +92,3 @@ class MainApp(ctk.CTk):
         else:
             self._pipeline_status = True
             pipeline_init()
-
-
