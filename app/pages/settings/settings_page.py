@@ -86,7 +86,7 @@ class SettingsPage(ScrollableNavigationBasePage):
         else:
             self.dark_light_switch.select()
 
-        self.font_size_label.configure(text=f"Font Size ({ui_scale})")
+        self.font_size_label.configure(text=f"Font Size ({ui_scale * 100:0.2f})")
         self.speaker_speed_label.configure(text=f"Speak Spead ({speaker_speed:0.2f})")
         self.speaker_volume_label.configure(text=f"Speak Volume ({speaker_volume:0.2f})")
 

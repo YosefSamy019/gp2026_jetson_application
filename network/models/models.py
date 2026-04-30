@@ -4,11 +4,11 @@ from dataclasses import dataclass
 import numpy as np
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=False)
 class ViolationDataModel:
-    create_time: datetime.datetime
-    image: np.ndarray
     violation_type: str
+    create_time: datetime.datetime = datetime.datetime.now()
+    image: np.ndarray = None
 
 
 @dataclass(frozen=True)

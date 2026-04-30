@@ -17,22 +17,12 @@ class SeatbeltDetectorTask(Task):
     def __init__(self, name: str, periodicity: float):
         super().__init__(name, periodicity)
 
-        self.previous_trip_status = None
-        self.can_use_violation_queue = 1
-        self.SEATBELT_THRESHOLD_SECONDS = 3
-        self.SEATBELT_THRESHOLD_VIOLATIONS_SECONDS = 10
-        self.seatbelt_start = None
-
     def update(self):
         lens_out = signals.lens_output_queue.get_last()
         trip_status = signals.trip_status_queue.get_last()
 
         if any(x is None for x in (trip_status, lens_out)):
             return
-
-        if trip_status != self.previous_trip_status and trip_status != 0:
-            self.can_use_violation_queue = 1
-            self.previous_trip_status = trip_status
 
         with signals.gpu_yolo_lock:
             results = seatbelt.seatbelt_model(lens_out.clean_img)
@@ -58,27 +48,6 @@ class SeatbeltDetectorTask(Task):
 
         if seatbelt_object_out.is_seatbelt_off:
             logs.add_log("Someone without seatbelt has been detected", logs.LogLevel.WARNING)
-
-        if seatbelt_object_out.is_seatbelt_off:
-            if self.seatbelt_start is None:
-                self.seatbelt_start = time.time()
-
-            if time.time() - self.seatbelt_start >= self.SEATBELT_THRESHOLD_SECONDS:
-                signals.speaker_queue.put(look_up_keys.KEY_DRIVER_SEATBELT)
-
-            if time.time() - self.seatbelt_start >= self.SEATBELT_THRESHOLD_VIOLATIONS_SECONDS:
-                if self.can_use_violation_queue == 1:
-                    signals.violations_queue.put(
-                        ViolationDataModel(
-                            create_time=datetime.datetime.now(),
-                            image=lens_out.clean_img,
-                            violation_type='no seatbelt',
-                        )
-                    )
-
-                    self.can_use_violation_queue = 0
-        else:
-            self.seatbelt_start = None
 
         signals.seatbelt_detector_yolo_queue.put(
             seatbelt_object_out

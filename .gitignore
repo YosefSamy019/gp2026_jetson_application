@@ -2,3 +2,4 @@ logs.txt
 snapshot/
 *.exe
 _CACHE/
+violations/

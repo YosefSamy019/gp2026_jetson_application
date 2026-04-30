@@ -94,3 +94,7 @@ class _SingleObjectsDetectorTaskOutput:
 @dataclass(frozen=True)
 class ObjectsDetectorTaskOutput:
     objects_list: List[_SingleObjectsDetectorTaskOutput]
+    any_gun_detected: bool
+    any_cellphone_detected: bool
+    any_food_detected: bool
+    any_smoke_detected: bool

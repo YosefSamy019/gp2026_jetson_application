@@ -28,7 +28,7 @@ class FaceMeshComponent(OverlayComponent):
             cv2.rectangle(frame,
                           face_extractor_out.face_rect_xyxy[0:2],
                           face_extractor_out.face_rect_xyxy[2:4],
-                          RGBColor.GRAY_DARK.value,
+                          RGBColor.WHITE.value,
                           )
 
         return frame

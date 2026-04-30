@@ -4,6 +4,7 @@ import app.pipe_line.timing as timing
 from app.pipe_line.tasks.camera_task import CameraTask
 from app.pipe_line.tasks.face_clipper_recognizer import FaceClipperRecognizerTask
 from app.pipe_line.tasks.lens_software_task import LensSoftwareTask
+from app.pipe_line.tasks.observer_task import ObserverTask
 from app.pipe_line.tasks.seatbelt_detector_task import SeatbeltDetectorTask
 from app.pipe_line.tasks.face_extractor_task import FaceExtractorTask
 from app.pipe_line.tasks.drive_detector_task import DriverDetectorTask
@@ -74,4 +75,9 @@ def pipeline_init():
     scheduler.register_task(SpeakerDetectorTask(
         name='speaker_detector_task',
         periodicity=timing.SPEAKER_TASK_SLEEP_TIME,
+    ))
+
+    scheduler.register_task(ObserverTask(
+        name='Observer Task',
+        periodicity=timing.OBSERVER_TASK,
     ))

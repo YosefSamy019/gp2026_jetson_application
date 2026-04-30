@@ -38,12 +38,14 @@ class SpeakerDetectorTask(Task):
 
     def _play(self, text):
         text = str(text)
-
-        # Replace Name
         face_recognizer_out = signals.face_clipper_recognizer_queue.get_last()
-        if face_recognizer_out is not None and face_recognizer_out.driver_name is not None:
-            text = text.replace('#NAME', face_recognizer_out.driver_name)
-        else:
-            text = text.replace('#NAME', '')
+
+        # Placement Keys
+        kv = {
+            "#NAME": face_recognizer_out.driver_name if face_recognizer_out is not None and face_recognizer_out.driver_name is not None else "",
+        }
+
+        for k, v in kv.items():
+            text = text.replace(k, v)
 
         speaker.speaker(text)

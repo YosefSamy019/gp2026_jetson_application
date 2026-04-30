@@ -39,6 +39,3 @@ class YawingTask(Task):
                 is_yawning_detected=True
             )
         )
-
-        if is_yawing:
-            signals.speaker_queue.put(look_up_keys.KEY_DRIVER_DROWSY)

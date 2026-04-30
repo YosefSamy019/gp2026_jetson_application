@@ -29,7 +29,3 @@ class DriverDetectorTask(Task):
                 raw_land_marks=face_extractor_out.raw_land_marks
             )
         )
-
-        if not face_extractor_out.face_found:
-            logs.add_log(f"Driver is not detected", logs.LogLevel.WARNING)
-            signals.speaker_queue.put(look_up_keys.KEY_DRIVER_NOT_DETECTED)

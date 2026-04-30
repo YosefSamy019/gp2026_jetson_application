@@ -10,10 +10,6 @@ class EyeOpenCloseTask(Task):
     def __init__(self, name: str, periodicity: float):
         super().__init__(name, periodicity)
 
-        self.eye_closed_start = None
-        self.DROWSY_THRESHOLD_SECONDS = 2
-        self.eye_flag = 0
-
     def update(self):
         driver_detector_out = signals.driver_detector_queue.get_last()
 
@@ -23,7 +19,7 @@ class EyeOpenCloseTask(Task):
                     ear_avg=None,
                     is_eye_open=None,
                     is_eye_close=None,
-                    is_eye_detected=False
+                    is_eye_detected=False,
                 )
             )
             return
@@ -32,7 +28,6 @@ class EyeOpenCloseTask(Task):
 
         ear_avg = eye.eye_model(temp_vector)
 
-        # eye is close when (EAR < 0.25)
         eye_flag = (ear_avg < 0.25)
 
         signals.eye_open_close_queue.put(
@@ -40,14 +35,6 @@ class EyeOpenCloseTask(Task):
                 ear_avg=ear_avg,
                 is_eye_open=not eye_flag,
                 is_eye_close=eye_flag,
-                is_eye_detected=True
+                is_eye_detected=True,
             )
         )
-
-        if self.eye_flag:
-            if self.eye_closed_start is None:
-                self.eye_closed_start = time.time()
-            elif time.time() - self.eye_closed_start >= self.DROWSY_THRESHOLD_SECONDS:
-                signals.speaker_queue.put(look_up_keys.KEY_DRIVER_DROWSY)
-        else:
-            self.eye_closed_start = None

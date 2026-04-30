@@ -21,8 +21,7 @@ KEY_HIGH_TEMPERATURE = "HIGH_TEMPERATURE"
 
 # Priorities
 PRIORITY_MAP = {
-    # Least important → GREETING
-    KEY_GREETING: 1,
+    # Least important
 
     # Driver attention & behavior
     KEY_DRIVER_FOOD:2,
@@ -39,8 +38,11 @@ PRIORITY_MAP = {
     # System & environment
     KEY_HIGH_TEMPERATURE: 10,
 
+    KEY_GREETING: 11,
+
     # Safety & emergency — most important
-    KEY_WEAPON_DETECTED: 11,
+    KEY_WEAPON_DETECTED: 12,
+
 }
 
 
